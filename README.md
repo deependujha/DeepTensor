@@ -1,1 +1,5 @@
-# DeepTorch
+# DeepTensor
+
+```bash
+pip install deeptensor
+```
