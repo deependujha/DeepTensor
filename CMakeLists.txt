@@ -22,4 +22,3 @@ pybind11_add_module(_core MODULE csrc/main.cc)
 # target_link_libraries(_core PUBLIC myLib)
 
 install(TARGETS _core DESTINATION ${SKBUILD_PROJECT_NAME})
-

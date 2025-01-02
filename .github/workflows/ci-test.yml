@@ -22,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: recursive  # Ensures submodules are initialized and updated
+          submodules: recursive # Ensures submodules are initialized and updated
       - name: Set up Python 3.10
         uses: actions/setup-python@v5
         with:
