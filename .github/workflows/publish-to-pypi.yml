@@ -22,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: 'true'
+          submodules: recursive  # Ensures submodules are initialized and updated
 
       - uses: actions/setup-python@v5
         with:
