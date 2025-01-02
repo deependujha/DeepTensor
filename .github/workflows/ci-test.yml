@@ -1,0 +1,38 @@
+name: CI testing
+
+# see: https://help.github.com/en/actions/reference/events-that-trigger-workflows
+on: # Trigger the workflow on push or pull request, but only for the main branch
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    types: [opened, reopened, ready_for_review, synchronize]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  pytester:
+    runs-on: ubuntu-latest
+
+    # Timeout: https://stackoverflow.com/a/59076067/4521646
+    timeout-minutes: 35
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive  # Ensures submodules are initialized and updated
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"
+
+      - name: Install package & dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install -e .
+
+      - name: Tests
+        run: pytest tests
