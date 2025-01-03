@@ -14,6 +14,19 @@ setup:
 test:
 	pytest tests
 
+ctest:
+	@mkdir -p build \
+		&& cd build \
+		&& cmake -DBUILD_TESTS=ON -DBUILD_PYBIND=OFF .. \
+		&& cmake --build . \
+		&& ctest
+
+pybind_intellisense:
+	@mkdir -p build \
+		&& cd build \
+		&& cmake -DBUILD_PYBIND=ON .. \
+		&& cmake --build .
+
 # delete all gitignored files
 clean:
 	git clean -fdX
