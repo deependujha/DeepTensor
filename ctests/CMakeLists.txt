@@ -6,6 +6,8 @@ set(
     TEST_CODE
     value_test.cc
     value_fixture_test.cc
+    nn_test.cc
+    rn_gen_test.cc
     )
 
 include_directories("${CMAKE_SOURCE_DIR}/csrc")

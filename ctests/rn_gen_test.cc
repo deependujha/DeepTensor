@@ -1,7 +1,8 @@
 #include <gtest/gtest.h>
+#include <vector>
 #include "utils.h"
 
-TEST(RandomNumberGenerator, IsConsistent) {
+TEST(RNGenTest, IsConsistent) {
   int seed = 12345;
 
   // Create two instances of RandomNumberGenerator with the same seed
