@@ -8,8 +8,9 @@
 
 class Module {
 public:
-  virtual ~Module() = default;
-  virtual std::vector<std::shared_ptr<Value>> parameters();
+  std::vector<std::shared_ptr<Value>> parameters() {
+    return std::vector<std::shared_ptr<Value>>();
+  }
 
   void zero_grad() {
     std::vector<std::shared_ptr<Value>> p = parameters();
@@ -50,7 +51,7 @@ public:
     _initialize(seed);
   }
 
-  std::vector<std::shared_ptr<Value>> parameters() override {
+  std::vector<std::shared_ptr<Value>> parameters() {
     std::vector<std::shared_ptr<Value>> p = this->weights;
     p.push_back(this->bias);
     return p;
@@ -123,7 +124,7 @@ public:
     return out;
   }
 
-  std::vector<std::shared_ptr<Value>> parameters() override {
+  std::vector<std::shared_ptr<Value>> parameters() {
     std::vector<std::shared_ptr<Value>> p;
     for (auto& e : neurons) {
       auto _ep = e->parameters();
@@ -185,7 +186,7 @@ public:
     return out;
   }
 
-  std::vector<std::shared_ptr<Value>> parameters() override {
+  std::vector<std::shared_ptr<Value>> parameters() {
     std::vector<std::shared_ptr<Value>> p;
     for (auto& e : this->layers) {
       auto _ep = e->parameters();
