@@ -16,6 +16,7 @@ project(${SKBUILD_PROJECT_NAME} VERSION 1.0.0 LANGUAGES CXX)
 
 
 add_subdirectory(csrc)
+set_target_properties(deeptensor_libs PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 if(BUILD_PYBIND)
     message(STATUS "----- Building PyBind -----")
