@@ -16,7 +16,9 @@ project(${SKBUILD_PROJECT_NAME} VERSION 1.0.0 LANGUAGES CXX)
 
 
 add_subdirectory(csrc)
-set_target_properties(deeptensor_libs PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+# the -fPIC (Position Independent Code) flag, which is required when linking static library (deeptensor_libs) it into a shared object (pybind module)
+set_target_properties(${DEEPTENSOR_LIBS} PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 if(BUILD_PYBIND)
     message(STATUS "----- Building PyBind -----")
