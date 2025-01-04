@@ -3,7 +3,7 @@
 #include "neural_network.h"
 #include "value.h"
 
-TEST(NeuralNetwork, NeuronTest) {
+TEST(NeuralNetworkTest, NeuronUsage) {
   std::shared_ptr<Neuron> n =
       std::make_shared<Neuron>(3, true, 42); // takes 5 inputs
 
@@ -12,11 +12,11 @@ TEST(NeuralNetwork, NeuronTest) {
       std::make_shared<Value>(2.5),
       std::make_shared<Value>(3.0)};
 
-    std::shared_ptr<Value> out = n->call(input);
+  std::shared_ptr<Value> out = n->call(input);
 
-    EXPECT_DOUBLE_EQ(out->grad, 0);
+  EXPECT_DOUBLE_EQ(out->grad, 0);
 
-    out->backward();
+  out->backward();
 
-    EXPECT_DOUBLE_EQ(out->grad, 10);
+  EXPECT_DOUBLE_EQ(out->grad, 1);
 }
