@@ -42,6 +42,7 @@ public:
   }
 
   void backward();
+
   std::string printMe() {
     std::string s = "Value(data=" + std::to_string(this->data) +
         ", grad=" + std::to_string(this->grad) + ")";
@@ -60,4 +61,5 @@ public:
   std::shared_ptr<Value> pow(int n);
   std::shared_ptr<Value> relu();
   std::shared_ptr<Value> neg();
+
 };
