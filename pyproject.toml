@@ -29,7 +29,7 @@ test = ["pytest"]
 
 
 [tool.scikit-build]
-# wheel.expand-macos-universal-tags = true
+wheel.expand-macos-universal-tags = true
 minimum-version = "build-system.requires"
 
 
