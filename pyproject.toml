@@ -4,8 +4,8 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "deeptensor"
-version = "0.1.0"
-description="A minimal example package (with pybind11)"
+version="0.1.0"
+url = "https://github.com/deependujha/deeptensor"
 readme = "README.md"
 authors = [
   { name = "Deependu Jha", email = "deependujha21@gmail.com" },
