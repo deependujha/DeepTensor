@@ -46,7 +46,7 @@ testpaths = ["tests"]
 
 
 [tool.cibuildwheel]
-build-frontend = "build[uv]"
+build-frontend = "pip"
 # test-command = "pytest tests"
 # test-extras = ["test"]
 
