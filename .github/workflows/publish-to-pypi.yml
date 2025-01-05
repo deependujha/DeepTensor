@@ -40,7 +40,6 @@ jobs:
 
       - name: Build wheels
         run: |
-
           make clean
           sudo apt install tree -y;
           tree
