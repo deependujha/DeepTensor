@@ -33,6 +33,11 @@ PYBIND11_MODULE(_core, m) {
               std::shared_ptr<Value>)>(&Value::add),
           "add value object with value object")
       .def(
+          "__radd__",
+          static_cast<std::shared_ptr<Value> (Value::*)(
+              std::shared_ptr<Value>)>(&Value::add),
+          "add value object with value object")
+      .def(
           "__sub__",
           static_cast<std::shared_ptr<Value> (Value::*)(double)>(&Value::sub),
           "subtract value object with double")
@@ -46,6 +51,11 @@ PYBIND11_MODULE(_core, m) {
               std::shared_ptr<Value>)>(&Value::mul),
           "subtract value object with value object")
       .def(
+          "__rsub__",
+          static_cast<std::shared_ptr<Value> (Value::*)(
+              std::shared_ptr<Value>)>(&Value::mul),
+          "subtract value object with value object")
+      .def(
           "__mul__",
           static_cast<std::shared_ptr<Value> (Value::*)(double)>(&Value::mul),
           "multiply value object with double")
@@ -55,6 +65,11 @@ PYBIND11_MODULE(_core, m) {
           "multiply value object with double")
       .def(
           "__mul__",
+          static_cast<std::shared_ptr<Value> (Value::*)(
+              std::shared_ptr<Value>)>(&Value::mul),
+          "multiply value object with value object")
+      .def(
+          "__rmul__",
           static_cast<std::shared_ptr<Value> (Value::*)(
               std::shared_ptr<Value>)>(&Value::mul),
           "multiply value object with value object")
@@ -77,8 +92,9 @@ PYBIND11_MODULE(_core, m) {
       .def(py::init<int, bool>())
       .def(py::init<int, bool, int>())
       .def("parameters", &Neuron::parameters)
-      .def("call", &Neuron::call)
-      .def("printMe", &Neuron::printMe);
+      .def("zero_grad", &Neuron::zero_grad)
+      .def("__call__", &Neuron::call)
+      .def("__repr__", &Neuron::printMe);
 
   //   exposing Layer class
   py::class_<Layer, std::shared_ptr<Layer>>(m, "Layer")
@@ -86,8 +102,9 @@ PYBIND11_MODULE(_core, m) {
       .def(py::init<int, int, bool>())
       .def(py::init<int, int, bool, int>())
       .def("parameters", &Layer::parameters)
-      .def("call", &Layer::call)
-      .def("printMe", &Layer::printMe);
+      .def("zero_grad", &Layer::zero_grad)
+      .def("__call__", &Layer::call)
+      .def("__repr__", &Layer::printMe);
 
   //   exposing MLP class
   py::class_<MLP, std::shared_ptr<MLP>>(m, "MLP")
@@ -95,6 +112,7 @@ PYBIND11_MODULE(_core, m) {
       .def(py::init<int, std::vector<int>, bool>())
       .def(py::init<int, std::vector<int>, bool, int>())
       .def("parameters", &MLP::parameters)
-      .def("call", &MLP::call)
-      .def("printMe", &MLP::printMe);
+      .def("zero_grad", &MLP::zero_grad)
+      .def("__call__", &MLP::call)
+      .def("__repr__", &MLP::printMe);
 }

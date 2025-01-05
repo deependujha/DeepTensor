@@ -29,7 +29,7 @@ def test_neuron_forward_pass():
 
     v1 = Value(1.0)
     v2 = Value(2.0)
-    result = n.call([v1, v2])
+    result = n([v1, v2])
 
     assert isinstance(result, Value)
     assert result.data is not None
@@ -48,7 +48,7 @@ def test_layer_forward_pass():
 
     v1 = Value(1.0)
     v2 = Value(2.0)
-    outputs = lr.call([v1, v2])
+    outputs = lr([v1, v2])
 
     assert len(outputs) == 3
     assert all(isinstance(o, Value) for o in outputs)
@@ -68,7 +68,7 @@ def test_mlp_forward_pass():
 
     v1 = Value(1.0)
     v2 = Value(2.0)
-    outputs = mlp.call([v1, v2])
+    outputs = mlp([v1, v2])
 
     assert len(outputs) == 2
     assert all(isinstance(o, Value) for o in outputs)
