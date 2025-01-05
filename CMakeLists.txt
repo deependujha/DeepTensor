@@ -12,7 +12,7 @@ option(BUILD_TESTS "Build tests" ON) # for googletest
 option(BUILD_PYBIND "Build pybind" ON) # for pybind
 
 
-project(${SKBUILD_PROJECT_NAME} VERSION 1.0.0 LANGUAGES CXX)
+project(${SKBUILD_PROJECT_NAME} VERSION 0.1.0 LANGUAGES CXX)
 
 
 add_subdirectory(csrc)
