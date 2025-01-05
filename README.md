@@ -22,3 +22,4 @@ pip install deeptensor
 - Train MNIST model
 - Train a character-level transformer model
 - Add support for DDP
+- Add support for CUDA execution
