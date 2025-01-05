@@ -8,9 +8,8 @@
 
 class Module {
 public:
-  std::vector<std::shared_ptr<Value>> parameters() {
-    return std::vector<std::shared_ptr<Value>>();
-  }
+  virtual ~Module() = default;
+  virtual std::vector<std::shared_ptr<Value>> parameters() = 0;
 
   void zero_grad() {
     std::vector<std::shared_ptr<Value>> p = parameters();
@@ -51,7 +50,7 @@ public:
     _initialize(seed);
   }
 
-  std::vector<std::shared_ptr<Value>> parameters() {
+  std::vector<std::shared_ptr<Value>> parameters() override {
     std::vector<std::shared_ptr<Value>> p = this->weights;
     p.push_back(this->bias);
     return p;
@@ -96,8 +95,8 @@ private:
 
   void _initialize() {
     for (int i = 0; i < this->nout; i++) {
-      std::shared_ptr<Neuron> tmp_n =
-          std::make_shared<Neuron>(this->nin, this->nonlin, this->seed);
+      std::shared_ptr<Neuron> tmp_n = std::make_shared<Neuron>(
+          this->nin, this->nonlin, this->seed + (1000 * i));
       neurons.push_back(tmp_n);
     }
   }
@@ -124,7 +123,7 @@ public:
     return out;
   }
 
-  std::vector<std::shared_ptr<Value>> parameters() {
+  std::vector<std::shared_ptr<Value>> parameters() override {
     std::vector<std::shared_ptr<Value>> p;
     for (auto& e : neurons) {
       auto _ep = e->parameters();
@@ -134,12 +133,8 @@ public:
   }
 
   std::string printMe() {
-    std::string s = "Layer of [";
-    for (auto& e : this->neurons) {
-      s += e->printMe();
-      s += ", ";
-    }
-    s += "]";
+    std::string s = "Layer(" + std::to_string(this->nin) + "," +
+        std::to_string(this->nout) + ")";
     return s;
   }
 };
@@ -159,7 +154,7 @@ class MLP : public Module {
 
     for (int i = 1; i < nouts.size(); i++) {
       std::shared_ptr<Layer> _l = std::make_shared<Layer>(
-          this->nouts[i - 1], this->nouts[i], this->nonlin, this->seed);
+          this->nouts[i - 1], this->nouts[i], this->nonlin, this->seed + i);
       this->layers.push_back(_l);
     }
   }
@@ -186,7 +181,7 @@ public:
     return out;
   }
 
-  std::vector<std::shared_ptr<Value>> parameters() {
+  std::vector<std::shared_ptr<Value>> parameters() override {
     std::vector<std::shared_ptr<Value>> p;
     for (auto& e : this->layers) {
       auto _ep = e->parameters();
@@ -196,7 +191,7 @@ public:
   }
 
   std::string printMe() {
-    std::string s = "Layer of [";
+    std::string s = "MLP of [";
     for (auto& e : this->layers) {
       s += e->printMe();
       s += ", ";

@@ -10,7 +10,14 @@ public:
 
   // Method to generate a random double between -1 and 1
   double generate() {
-    return dis(gen);
+    double val = dis(gen);
+    if (val > 1.0) {
+      return 1.0;
+    }
+    if (val < -1.0) {
+      return -1.0;
+    }
+    return val;
   }
 
 private:

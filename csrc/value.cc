@@ -4,7 +4,6 @@
 #include <unordered_set>
 #include <vector>
 
-
 /// BuildTopo
 /// if not already visited the node, mark it visited, and then subsequently
 /// traverse it's child nodes
@@ -50,7 +49,6 @@ std::shared_ptr<Value> Value::add(std::shared_ptr<Value> other) {
   std::unordered_set<std::shared_ptr<Value>> prev = {shared_from_this(), other};
   std::shared_ptr<Value> newVal = std::make_shared<Value>(newData, prev, '+');
 
-
   // Define the backward function
   std::function<void()> add_backward = [this, other, newVal]() {
     this->grad += newVal->grad;
@@ -62,12 +60,10 @@ std::shared_ptr<Value> Value::add(std::shared_ptr<Value> other) {
   return newVal;
 }
 
-
 std::shared_ptr<Value> Value::add(double other) {
   double newData = this->data + other;
   std::unordered_set<std::shared_ptr<Value>> prev = {shared_from_this()};
   std::shared_ptr<Value> newVal = std::make_shared<Value>(newData, prev, '+');
-
 
   // Define the backward function
   std::function<void()> add_backward = [this, newVal]() {
@@ -79,12 +75,10 @@ std::shared_ptr<Value> Value::add(double other) {
   return newVal;
 }
 
-
 std::shared_ptr<Value> Value::sub(std::shared_ptr<Value> other) {
   double newData = this->data - other->data;
   std::unordered_set<std::shared_ptr<Value>> prev = {shared_from_this(), other};
   std::shared_ptr<Value> newVal = std::make_shared<Value>(newData, prev, '-');
-
 
   // Define the backward function
   std::function<void()> add_backward = [this, other, newVal]() {
@@ -97,12 +91,10 @@ std::shared_ptr<Value> Value::sub(std::shared_ptr<Value> other) {
   return newVal;
 }
 
-
 std::shared_ptr<Value> Value::sub(double other) {
   double newData = this->data - other;
   std::unordered_set<std::shared_ptr<Value>> prev = {shared_from_this()};
   std::shared_ptr<Value> newVal = std::make_shared<Value>(newData, prev, '-');
-
 
   // Define the backward function
   std::function<void()> add_backward = [this, other, newVal]() {
@@ -114,12 +106,10 @@ std::shared_ptr<Value> Value::sub(double other) {
   return newVal;
 }
 
-
 std::shared_ptr<Value> Value::mul(std::shared_ptr<Value> other) {
   double newData = this->data * other->data;
   std::unordered_set<std::shared_ptr<Value>> prev = {shared_from_this(), other};
   std::shared_ptr<Value> newVal = std::make_shared<Value>(newData, prev, '*');
-
 
   // Define the backward function
   std::function<void()> add_backward = [this, other, newVal]() {
@@ -132,12 +122,10 @@ std::shared_ptr<Value> Value::mul(std::shared_ptr<Value> other) {
   return newVal;
 }
 
-
 std::shared_ptr<Value> Value::mul(double other) {
   double newData = this->data * other;
   std::unordered_set<std::shared_ptr<Value>> prev = {shared_from_this()};
   std::shared_ptr<Value> newVal = std::make_shared<Value>(newData, prev, '*');
-
 
   // Define the backward function
   std::function<void()> add_backward = [this, other, newVal]() {
@@ -149,12 +137,10 @@ std::shared_ptr<Value> Value::mul(double other) {
   return newVal;
 }
 
-
 std::shared_ptr<Value> Value::pow(int n) {
   double newData = std::pow(this->data, n);
   std::unordered_set<std::shared_ptr<Value>> prev = {shared_from_this()};
   std::shared_ptr<Value> newVal = std::make_shared<Value>(newData, prev, 'e');
-
 
   // Define the backward function
   std::function<void()> add_backward = [this, n, newVal]() {
@@ -167,12 +153,10 @@ std::shared_ptr<Value> Value::pow(int n) {
   return newVal;
 }
 
-
 std::shared_ptr<Value> Value::relu() {
   double newData = this->data < 0 ? 0 : this->data;
   std::unordered_set<std::shared_ptr<Value>> prev = {shared_from_this()};
   std::shared_ptr<Value> newVal = std::make_shared<Value>(newData, prev, 'r');
-
 
   // Define the backward function
   std::function<void()> add_backward = [this, newVal]() {
@@ -183,7 +167,6 @@ std::shared_ptr<Value> Value::relu() {
 
   return newVal;
 }
-
 
 std::shared_ptr<Value> Value::neg() {
   double newData = this->data * -1;
