@@ -10,6 +10,7 @@ set(
     rn_gen_test.cc
     jsoncpp_read_test.cc
     jsoncpp_write_test.cc
+    non_linear_test.cc
     )
 
 include_directories("${CMAKE_SOURCE_DIR}/csrc")

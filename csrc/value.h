@@ -20,11 +20,11 @@ private:
       std::vector<std::shared_ptr<Value>>& topo_list);
 
 public:
+  double data = 0.0;
+  double grad = 0.0;
   std::unordered_set<std::shared_ptr<Value>> _prev = {};
   char _op = '-'; // the op that produced this node
 
-  double data;
-  double grad = 0.0;
   Value(double data) : data(data) {}
   Value(double data, std::unordered_set<std::shared_ptr<Value>> _prev, char _op)
       : data(data), _prev(std::move(_prev)), _op(_op) {}
@@ -57,9 +57,18 @@ public:
 
   std::shared_ptr<Value> mul(std::shared_ptr<Value> other);
   std::shared_ptr<Value> mul(double other);
+  std::shared_ptr<Value> div(std::shared_ptr<Value> other);
+  std::shared_ptr<Value> div(double other);
+  std::shared_ptr<Value> rdiv(double other);
 
   std::shared_ptr<Value> pow(int n);
-  std::shared_ptr<Value> relu();
   std::shared_ptr<Value> neg();
+  std::shared_ptr<Value> exp();
 
+  // non-linear functions
+  std::shared_ptr<Value> relu();
+  std::shared_ptr<Value> tanh();
+  std::shared_ptr<Value> gelu();
+  std::shared_ptr<Value> sigmoid();
+  std::shared_ptr<Value> leakyRelu(double alpha);
 };

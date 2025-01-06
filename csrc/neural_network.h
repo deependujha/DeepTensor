@@ -57,7 +57,7 @@ public:
   }
 
   std::shared_ptr<Value> call(std::vector<std::shared_ptr<Value>> input) {
-    assert(input.size() == this->nin);
+    assert(int(input.size()) == this->nin);
 
     std::shared_ptr<Value> out = std::make_shared<Value>(0);
 
@@ -152,7 +152,7 @@ class MLP : public Module {
         this->nin, this->nouts[0], this->nonlin, this->seed);
     this->layers.push_back(l1);
 
-    for (int i = 1; i < nouts.size(); i++) {
+    for (int i = 1; i < int(nouts.size()); i++) {
       std::shared_ptr<Layer> _l = std::make_shared<Layer>(
           this->nouts[i - 1], this->nouts[i], this->nonlin, this->seed + i);
       this->layers.push_back(_l);
