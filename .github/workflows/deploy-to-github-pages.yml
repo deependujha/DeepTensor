@@ -1,4 +1,4 @@
-name: ci
+name: publish docs on gh-pages
 on:
   push:
     branches:
