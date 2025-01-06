@@ -57,9 +57,18 @@ public:
 
   std::shared_ptr<Value> mul(std::shared_ptr<Value> other);
   std::shared_ptr<Value> mul(double other);
+  std::shared_ptr<Value> div(std::shared_ptr<Value> other);
+  std::shared_ptr<Value> div(double other);
+  std::shared_ptr<Value> rdiv(double other);
 
   std::shared_ptr<Value> pow(int n);
-  std::shared_ptr<Value> relu();
   std::shared_ptr<Value> neg();
+  std::shared_ptr<Value> exp();
 
+  // non-linear functions
+  std::shared_ptr<Value> relu();
+  std::shared_ptr<Value> tanh();
+  std::shared_ptr<Value> gelu();
+  std::shared_ptr<Value> sigmoid();
+  std::shared_ptr<Value> leakyRelu(double alpha);
 };
