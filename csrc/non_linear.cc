@@ -3,6 +3,7 @@
 #include <memory>
 #include <unordered_set>
 #include "value.h"
+#include <cassert>
 
 // non-linear methods for Value class
 std::shared_ptr<Value> Value::relu() {

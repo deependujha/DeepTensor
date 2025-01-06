@@ -3,6 +3,7 @@
 #include <memory>
 #include <unordered_set>
 #include <vector>
+#include <cassert>
 
 /// BuildTopo
 /// if not already visited the node, mark it visited, and then subsequently
