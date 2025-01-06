@@ -1,5 +1,6 @@
 #include "tensor.h"
 #include <cassert>
+#include <stdexcept>
 #include <string>
 
 // ==== my lightning ai interview question (with Luca Antiga, CTO, Lightning AI)
