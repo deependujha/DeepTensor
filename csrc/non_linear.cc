@@ -1,9 +1,9 @@
 #include "non_linear.h"
+#include <cassert>
 #include <cmath>
 #include <memory>
 #include <unordered_set>
 #include "value.h"
-#include <cassert>
 
 // non-linear methods for Value class
 std::shared_ptr<Value> Value::relu() {
@@ -180,11 +180,12 @@ std::vector<std::shared_ptr<Value>> softmax(
       [](const std::shared_ptr<Value>& a, const std::shared_ptr<Value>& b) {
         return a->data < b->data;
       });
-
   // Step 2: Compute exp(x_i - max_val) for each input
-  std::vector<std::shared_ptr<Value>> exp_vals(inp.size());
+  std::vector<std::shared_ptr<Value>> exp_vals;
+  exp_vals.reserve(inp.size());
   for (auto& val : inp) {
-    exp_vals.push_back((val->sub(max_val))->exp());
+    auto curr_exp_val = val->sub(max_val)->exp();
+    exp_vals.push_back(curr_exp_val);
   }
 
   // Step 3: Compute the sum of exp(x_i - max_val)
@@ -194,7 +195,8 @@ std::vector<std::shared_ptr<Value>> softmax(
   }
 
   // Step 4: Compute softmax = exp(x_i - max_val) / sum_exp
-  std::vector<std::shared_ptr<Value>> softmax_vals(inp.size());
+  std::vector<std::shared_ptr<Value>> softmax_vals;
+  softmax_vals.reserve(exp_vals.size());
   for (auto& exp_val : exp_vals) {
     softmax_vals.push_back(exp_val->div(sum_exp));
   }
