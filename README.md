@@ -2,6 +2,12 @@
 
 ![mexican cat dance](./assets/mexican-cat-dance.gif)
 
+- DeepTensor: A minimal deep learning library focused on custom autograd and efficient tensor operations.
+
+---
+
+## Installation
+
 ```bash
 pip install deeptensor
 ```
@@ -13,6 +19,12 @@ pip install deeptensor
 - [play with demo](./demo/main.ipynb)
 
 ![demo](./assets/trained-model.png)
+
+---
+
+## Check Docs
+
+- [visit docs](https://deependujha.github.io/deeptensor)
 
 ---
 
