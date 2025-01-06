@@ -20,11 +20,11 @@ private:
       std::vector<std::shared_ptr<Value>>& topo_list);
 
 public:
-  std::unordered_set<std::shared_ptr<Value>> _prev = {};
   char _op = '-'; // the op that produced this node
-
-  double data;
+  double data = 0.0;
   double grad = 0.0;
+  std::unordered_set<std::shared_ptr<Value>> _prev = {};
+
   Value(double data) : data(data) {}
   Value(double data, std::unordered_set<std::shared_ptr<Value>> _prev, char _op)
       : data(data), _prev(std::move(_prev)), _op(_op) {}

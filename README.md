@@ -29,4 +29,3 @@ pip install deeptensor
 ## To be done later
 
 - Add support for optimizers (sgd, nesterov, adam, etc)
-- Add support for non-linear layers (relu, tanh, gelu, etc)
