@@ -34,7 +34,7 @@ TEST(TensorTest, IntializeAndCheckGetSet) {
 
   std::vector<int> expected_shape = {5, 3};
   std::vector<int> got_shape = t->shape;
-  for (int i = 0; i < got_shape.size(); i++) {
+  for (int i = 0; i < int(got_shape.size()); i++) {
     EXPECT_EQ(got_shape[i], expected_shape[i]);
   }
 }
