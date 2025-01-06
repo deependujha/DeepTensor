@@ -23,3 +23,10 @@ pip install deeptensor
 - Train a character-level transformer model
 - Add support for DDP
 - Add support for CUDA execution
+
+---
+
+## To be done later
+
+- Add support for optimizers (sgd, nesterov, adam, etc)
+- Add support for non-linear layers (relu, tanh, gelu, etc)
