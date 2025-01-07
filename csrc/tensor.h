@@ -38,4 +38,21 @@ public:
   }
 
   int normalize_idx(std::vector<int> idx);
+
+  // tensor specific operations (so layers can directly call them)
+  void zero_grad() {
+    for (auto& e : this->v) {
+      e->grad = 0;
+    }
+  }
+
+  std::shared_ptr<Tensor> add(std::shared_ptr<Tensor> other) {
+    std::shared_ptr<Tensor> out;
+    return out;
+  }
+
+  std::shared_ptr<Tensor> matmul(std::shared_ptr<Tensor> other) {
+    std::shared_ptr<Tensor> out;
+    return out;
+  }
 };
