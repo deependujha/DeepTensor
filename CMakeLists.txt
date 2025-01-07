@@ -32,6 +32,8 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     )
 endif()
 
+include_directories("${CMAKE_SOURCE_DIR}/csrc")
+
 target_link_libraries(${DEEPTENSOR_LIBS} jsoncpp_lib)
 
 # ------- ------- ------- -------

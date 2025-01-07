@@ -1,5 +1,6 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include "layers/feed_forward_layer.h"
 #include "neural_network.h"
 #include "value.h"
 
@@ -86,33 +87,20 @@ PYBIND11_MODULE(_core, m) {
           static_cast<std::shared_ptr<Value> (Value::*)()>(&Value::relu),
           "apply relu operation");
 
-  //   exposing Neuron class
-  py::class_<Neuron, std::shared_ptr<Neuron>>(m, "Neuron")
-      .def(py::init<int>())
-      .def(py::init<int, bool>())
-      .def(py::init<int, bool, int>())
-      .def("parameters", &Neuron::parameters)
-      .def("zero_grad", &Neuron::zero_grad)
-      .def("__call__", &Neuron::call)
-      .def("__repr__", &Neuron::printMe);
-
   //   exposing Layer class
-  py::class_<Layer, std::shared_ptr<Layer>>(m, "Layer")
+  py::class_<FeedForwardLayer, std::shared_ptr<FeedForwardLayer>>(m, "FeedForwardLayer")
       .def(py::init<int, int>())
-      .def(py::init<int, int, bool>())
-      .def(py::init<int, int, bool, int>())
-      .def("parameters", &Layer::parameters)
-      .def("zero_grad", &Layer::zero_grad)
-      .def("__call__", &Layer::call)
-      .def("__repr__", &Layer::printMe);
+      .def(py::init<int, int, int>())
+      .def("zero_grad", &FeedForwardLayer::zero_grad)
+      .def("__call__", &FeedForwardLayer::call)
+      .def("__repr__", &FeedForwardLayer::printMe);
 
   //   exposing MLP class
-  py::class_<MLP, std::shared_ptr<MLP>>(m, "MLP")
-      .def(py::init<int, std::vector<int>>())
-      .def(py::init<int, std::vector<int>, bool>())
-      .def(py::init<int, std::vector<int>, bool, int>())
-      .def("parameters", &MLP::parameters)
-      .def("zero_grad", &MLP::zero_grad)
-      .def("__call__", &MLP::call)
-      .def("__repr__", &MLP::printMe);
+  py::class_<Model, std::shared_ptr<Model>>(m, "Model")
+      .def(py::init<std::vector<std::shared_ptr<Layer>>, bool>())
+      .def("zero_grad", &Model::zero_grad)
+      .def("save_model", &Model::save_model)
+      .def("load_model", &Model::load_model)
+      .def("__call__", &Model::call)
+      .def("__repr__", &Model::printMe);
 }

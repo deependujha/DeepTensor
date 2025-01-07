@@ -75,3 +75,71 @@ TEST(TensorTest, TestNormalizeIdx) {
     }
   }
 }
+
+// ====== Tensor fixture ======
+class TensorFixtureTest : public testing::Test {
+protected:
+  TensorFixtureTest() {
+    // t1
+    t1->set({0, 0}, std::make_shared<Value>(1));
+    t1->set({0, 1}, std::make_shared<Value>(2));
+    t1->set({0, 2}, std::make_shared<Value>(3));
+    t1->set({1, 0}, std::make_shared<Value>(4));
+    t1->set({1, 1}, std::make_shared<Value>(5));
+    t1->set({1, 2}, std::make_shared<Value>(6));
+
+    // t2
+    t2->set({0, 0}, std::make_shared<Value>(10));
+    t2->set({0, 1}, std::make_shared<Value>(11));
+    t2->set({1, 0}, std::make_shared<Value>(20));
+    t2->set({1, 1}, std::make_shared<Value>(21));
+    t2->set({2, 0}, std::make_shared<Value>(30));
+    t2->set({2, 1}, std::make_shared<Value>(31));
+  }
+
+  // t1: [[1,2,3], [4,5,6]]
+  // t2: [[10,11], [20,21], [30,31]]
+  std::shared_ptr<Tensor> t1 = std::make_unique<Tensor>(std::vector<int>{2, 3});
+  std::shared_ptr<Tensor> t2 = std::make_unique<Tensor>(std::vector<int>{3, 2});
+};
+
+TEST_F(TensorFixtureTest, AddTest) {
+  // t3: [[140, 146], [320, 335]]
+  std::shared_ptr<Tensor> t3 = std::make_unique<Tensor>(std::vector<int>{2, 3});
+  // t1
+    t3->set({0, 0}, std::make_shared<Value>(10));
+    t3->set({0, 1}, std::make_shared<Value>(10));
+    t3->set({0, 2}, std::make_shared<Value>(10));
+    t3->set({1, 0}, std::make_shared<Value>(10));
+    t3->set({1, 1}, std::make_shared<Value>(10));
+    t3->set({1, 2}, std::make_shared<Value>(10));
+
+  std::shared_ptr<Tensor> t_sum = t3->add(t1);
+
+  EXPECT_EQ(t_sum->dims(), 2);
+
+  EXPECT_EQ(t_sum->shape[0], 2);
+  EXPECT_EQ(t_sum->shape[1], 3);
+
+  EXPECT_DOUBLE_EQ(t_sum->get(0)->data, double(11));
+  EXPECT_DOUBLE_EQ(t_sum->get(1)->data, double(12));
+  EXPECT_DOUBLE_EQ(t_sum->get(2)->data, double(13));
+  EXPECT_DOUBLE_EQ(t_sum->get(3)->data, double(14));
+  EXPECT_DOUBLE_EQ(t_sum->get(4)->data, double(15));
+  EXPECT_DOUBLE_EQ(t_sum->get(5)->data, double(16));
+}
+
+TEST_F(TensorFixtureTest, MatMulTest) {
+  // t3: [[140, 146], [320, 335]]
+  std::shared_ptr<Tensor> t3 = t1->matmul(t2);
+
+  EXPECT_EQ(t3->dims(), 2);
+
+  EXPECT_EQ(t3->shape[0], 2);
+  EXPECT_EQ(t3->shape[1], 2);
+
+  EXPECT_DOUBLE_EQ(t3->get(0)->data, double(140));
+  EXPECT_DOUBLE_EQ(t3->get(1)->data, double(146));
+  EXPECT_DOUBLE_EQ(t3->get(2)->data, double(320));
+  EXPECT_DOUBLE_EQ(t3->get(3)->data, double(335));
+}
