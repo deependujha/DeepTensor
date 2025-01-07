@@ -28,10 +28,15 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Build cpp project and run test
+      - name: Install Clang
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang clang-tidy clang-format libc++-dev libc++abi-dev
+
+      - name: Configure and Build with Clang
         run: |
           mkdir build \
           && cd build \
-          && cmake .. \
+          && CC=clang CXX=clang++ cmake .. \
           && cmake --build . \
           && ctest --rerun-failed --output-on-failure
