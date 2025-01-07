@@ -31,3 +31,4 @@ jobs:
       - name: Build cpp project and run test
         run: |
           make ctest
+          cd build && ctest --rerun-failed --output-on-failure
