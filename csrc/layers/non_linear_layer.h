@@ -1,7 +1,7 @@
 #pragma once
 #include "../neural_network.h"
 
-class ReLu : Layer {
+class ReLu : public Layer {
 public:
   std::shared_ptr<Tensor> call(std::shared_ptr<Tensor> input, bool using_cuda)
       override {
@@ -15,7 +15,7 @@ public:
   void zero_grad() override {};
 };
 
-class GeLu : Layer {
+class GeLu : public Layer {
 public:
   std::shared_ptr<Tensor> call(std::shared_ptr<Tensor> input, bool using_cuda)
       override {
@@ -29,7 +29,7 @@ public:
   void zero_grad() override {};
 };
 
-class Tanh : Layer {
+class Tanh : public Layer {
 public:
   std::shared_ptr<Tensor> call(std::shared_ptr<Tensor> input, bool using_cuda)
       override {
@@ -43,7 +43,7 @@ public:
   void zero_grad() override {};
 };
 
-class Sigmoid : Layer {
+class Sigmoid : public Layer {
 public:
   std::shared_ptr<Tensor> call(std::shared_ptr<Tensor> input, bool using_cuda)
       override {
@@ -57,7 +57,7 @@ public:
   void zero_grad() override {};
 };
 
-class LeakyReLu : Layer {
+class LeakyReLu : public Layer {
 public:
   double alpha;
   LeakyReLu(double alpha) : alpha(alpha) {}
@@ -73,7 +73,7 @@ public:
   void zero_grad() override {};
 };
 
-class SoftMax : Layer {
+class SoftMax : public Layer {
 public:
   std::shared_ptr<Tensor> call(std::shared_ptr<Tensor> input, bool using_cuda)
       override {
