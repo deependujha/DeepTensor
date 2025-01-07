@@ -4,21 +4,6 @@
 #include <string>
 #include <vector>
 #include "tensor.h"
-#include "value.h"
-
-class Module {
-public:
-  virtual ~Module() = default;
-  virtual std::vector<std::shared_ptr<Value>> parameters() = 0;
-
-  void zero_grad() {
-    std::vector<std::shared_ptr<Value>> p = parameters();
-
-    for (auto& e : p) {
-      e->grad = 0;
-    }
-  }
-};
 
 class Layer {
 public:
