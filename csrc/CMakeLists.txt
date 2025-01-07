@@ -2,7 +2,6 @@ set(
     tensor_libs_file
     value.cc
     jsoncpp.cc
-    non_linear.cc
     tensor.cc
 )
 
