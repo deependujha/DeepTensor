@@ -5,7 +5,7 @@
 #include <vector>
 #include "value.h"
 
-class Tensor {
+class Tensor : public std::enable_shared_from_this<Tensor> {
 public:
   std::vector<int> shape;
   std::vector<int> strides; // jump each index needs to make
@@ -97,11 +97,28 @@ public:
 
   void backward() {
     for (auto& e : this->v) {
-      e->executeBackWardMethod();
+      e->backward();
     }
   }
 
+  void remove_redundant_rows(std::shared_ptr<Tensor> t) {
+    // remove redundant rows(1)
+    std::vector<int> new_shape = {};
+    for (auto& e : t->shape) {
+      if (e > 1) {
+        new_shape.push_back(e);
+      }
+    }
+    if (new_shape.size() == 0) {
+      new_shape.push_back(1);
+    }
+    t->shape = new_shape;
+  }
+
   std::shared_ptr<Tensor> add(std::shared_ptr<Tensor> other) {
+    remove_redundant_rows(shared_from_this());
+    remove_redundant_rows(other);
+
     if (this->shape != other->shape) {
       std::string this_shape_str = "(";
       for (auto& e : this->shape) {
@@ -155,9 +172,12 @@ public:
     // Reshape if either is a vector (1D tensor)
     if (this_shape.size() == 1) {
       this_shape.insert(this_shape.begin(), 1); // Treat as row vector
+      std::vector<int> new_shape = {1, this_shape[0]};
+      this->shape = new_shape;
     }
     if (other_shape.size() == 1) {
       other_shape.push_back(1); // Treat as column vector
+      other->shape.push_back(1);
     }
 
     // Validate dimensions for matrix multiplication

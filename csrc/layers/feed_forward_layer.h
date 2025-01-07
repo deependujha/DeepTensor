@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <string>
 #include "../neural_network.h"
 #include "../tensor.h"
 #include "../utils.h"
@@ -20,14 +21,16 @@ private:
     // Create two instances of RandomNumberGenerator with the same seed
     RandomNumberGenerator rng(this->seed);
 
-    for (int i = 0; i < this->nout; i++) {
-      for (int j = 0; j < this->nin; j++) {
+    for (int i = 0; i < this->nin; i++) {
+      for (int j = 0; j < this->nout; j++) {
         double data = rng.generate();
         std::shared_ptr<Value> curr_v = std::make_shared<Value>(data);
 
         this->weights->set({i, j}, curr_v);
       }
-      this->bias->set(i, std::make_shared<Value>(0));
+    }
+    for (int j = 0; j < this->nout; j++) {
+      this->bias->set(j, std::make_shared<Value>(0));
     }
   }
 
