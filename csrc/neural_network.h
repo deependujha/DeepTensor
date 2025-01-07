@@ -5,6 +5,7 @@
 #include <utility>
 #include <vector>
 #include "tensor.h"
+#include <iostream>
 
 class Layer {
 public:
@@ -30,6 +31,7 @@ public:
   std::shared_ptr<Tensor> call(std::shared_ptr<Tensor> input) {
     std::shared_ptr<Tensor> out = input;
     for (auto& e : this->layers) {
+      std::cerr<<"going to call layer: "<<e->printMe()<<"\n";
       out = e->call(out, this->using_cuda);
     }
     return out;

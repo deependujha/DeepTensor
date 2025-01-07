@@ -49,6 +49,7 @@ public:
       throw std::invalid_argument(
           "Input tensor shape mismatch with layer's weights.");
     }
+    std::cerr<<"feed forward layer call method called";
     std::shared_ptr<Tensor> out = input->matmul(this->weights)->add(this->bias);
     return out;
   }
