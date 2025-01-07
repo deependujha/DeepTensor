@@ -10,6 +10,8 @@ public:
   std::vector<int> shape;
   std::vector<int> strides; // jump each index needs to make
   std::vector<std::shared_ptr<Value>> v;
+  int maxIdx;
+  int minIdx;
 
   Tensor(std::vector<int> shape) : shape(std::move(shape)) {
     int total_size = 1;
@@ -23,25 +25,60 @@ public:
     for (int i = int(this->shape.size()) - 2; i >= 0; --i) {
       strides[i] = strides[i + 1] * this->shape[i + 1];
     }
+
+    this->minIdx = 0;
+    this->maxIdx = 1;
+    for (auto& e : this->shape) {
+      this->maxIdx *= e;
+    }
+    maxIdx--; // 1 less
   }
 
   void set(std::vector<int> idx, std::shared_ptr<Value> _v) {
     int original_idx = normalize_idx(idx);
+    if ((original_idx < this->minIdx) || (original_idx > this->maxIdx)) {
+      std::string error_msg = "Index must be in the range. Limit (" +
+          std::to_string(this->minIdx) + "," + std::to_string(this->maxIdx) +
+          "), but found: " + std::to_string(original_idx) + ".";
+
+      throw std::runtime_error(error_msg);
+    }
     this->v[original_idx] = _v;
   }
 
   std::shared_ptr<Value> get(std::vector<int> idx) {
     int original_idx = normalize_idx(idx);
+    if ((original_idx < this->minIdx) || (original_idx > this->maxIdx)) {
+      std::string error_msg = "Index must be in the range. Limit (" +
+          std::to_string(this->minIdx) + "," + std::to_string(this->maxIdx) +
+          "), but found: " + std::to_string(original_idx) + ".";
+
+      throw std::runtime_error(error_msg);
+    }
     return this->v[original_idx];
   }
 
   // real index
   void set(int idx, std::shared_ptr<Value> _v) {
+    if ((idx < this->minIdx) || (idx > this->maxIdx)) {
+      std::string error_msg = "Index must be in the range. Limit (" +
+          std::to_string(this->minIdx) + "," + std::to_string(this->maxIdx) +
+          "), but found: " + std::to_string(idx) + ".";
+
+      throw std::runtime_error(error_msg);
+    }
     this->v[idx] = _v;
   }
 
   // real index
   std::shared_ptr<Value> get(int idx) {
+    if ((idx < this->minIdx) || (idx > this->maxIdx)) {
+      std::string error_msg = "Index must be in the range. Limit (" +
+          std::to_string(this->minIdx) + "," + std::to_string(this->maxIdx) +
+          "), but found: " + std::to_string(idx) + ".";
+
+      throw std::runtime_error(error_msg);
+    }
     return this->v[idx];
   }
 

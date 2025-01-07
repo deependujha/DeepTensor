@@ -27,7 +27,7 @@ private:
 
         this->weights->set({i, j}, curr_v);
       }
-      this->bias->set({i}, std::make_shared<Value>(0));
+      this->bias->set(i, std::make_shared<Value>(0));
     }
   }
 
