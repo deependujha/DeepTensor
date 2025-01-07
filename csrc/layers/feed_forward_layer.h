@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <string>
+#include <vector>
 #include "../neural_network.h"
 #include "../tensor.h"
 #include "../utils.h"
@@ -49,7 +50,9 @@ public:
       throw std::invalid_argument(
           "Input tensor shape mismatch with layer's weights.");
     }
-    std::cerr<<"feed forward layer call method called";
+
+    input->reshape(std::vector<int>{1, input->shape[0]});
+    std::cerr << "feed forward layer call method called";
     std::shared_ptr<Tensor> out = input->matmul(this->weights)->add(this->bias);
     return out;
   }

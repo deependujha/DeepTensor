@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -12,6 +13,10 @@ public:
   std::vector<std::shared_ptr<Value>> v;
   int maxIdx;
   int minIdx;
+
+  void reshape(std::vector<int> new_shape) {
+    this->shape = new_shape;
+  }
 
   Tensor(std::vector<int> shape) : shape(std::move(shape)) {
     int total_size = 1;
@@ -161,6 +166,19 @@ public:
   }
 
   std::shared_ptr<Tensor> matmul(std::shared_ptr<Tensor> other) {
+    std::string curr_size = "(";
+    for (auto& e : this->shape) {
+      curr_size += std::to_string(e) + ",";
+    }
+    curr_size += ")";
+    std::string other_size = "(";
+    for (auto& e : other->shape) {
+      curr_size += std::to_string(e) + ",";
+    }
+    other_size += ")";
+    std::cerr << "matmul called for matrix " << curr_size << " and matrix "
+              << other_size << "\n";
+
     if (!other) {
       throw std::runtime_error("Cannot perform matmul with a null tensor.");
     }
