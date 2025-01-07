@@ -129,6 +129,20 @@ public:
     return out;
   }
 
+  std::shared_ptr<Tensor> div(std::shared_ptr<Value> other) {
+    if (other->data == 0) {
+      throw std::runtime_error("Division is not supported by Value(0)");
+    }
+
+    std::shared_ptr<Tensor> out = std::make_shared<Tensor>(this->shape);
+
+    for (int i = 0; i < this->v.size(); i++) {
+      std::shared_ptr<Value> curr_v = this->get(i)->div(other);
+      out->set(i, std::move(curr_v));
+    }
+    return out;
+  }
+
   std::shared_ptr<Tensor> matmul(std::shared_ptr<Tensor> other) {
     if (!other) {
       throw std::runtime_error("Cannot perform matmul with a null tensor.");
@@ -171,5 +185,96 @@ public:
     }
 
     return out;
+  }
+
+  // non-linear layers in tesor
+  std::shared_ptr<Tensor> relu() {
+    std::shared_ptr<Tensor> out = std::make_shared<Tensor>(this->shape);
+    int i = 0;
+    for (auto& e : this->v) {
+      std::shared_ptr<Value> curr = e->relu();
+      out->set(i, curr);
+      i++;
+    }
+    return out;
+  }
+
+  std::shared_ptr<Tensor> tanh() {
+    std::shared_ptr<Tensor> out = std::make_shared<Tensor>(this->shape);
+    int i = 0;
+    for (auto& e : this->v) {
+      std::shared_ptr<Value> curr = e->tanh();
+      out->set(i, curr);
+      i++;
+    }
+    return out;
+  }
+
+  std::shared_ptr<Tensor> gelu() {
+    std::shared_ptr<Tensor> out = std::make_shared<Tensor>(this->shape);
+    int i = 0;
+    for (auto& e : this->v) {
+      std::shared_ptr<Value> curr = e->gelu();
+      out->set(i, curr);
+      i++;
+    }
+    return out;
+  }
+
+  std::shared_ptr<Tensor> sigmoid() {
+    std::shared_ptr<Tensor> out = std::make_shared<Tensor>(this->shape);
+    int i = 0;
+    for (auto& e : this->v) {
+      std::shared_ptr<Value> curr = e->sigmoid();
+      out->set(i, curr);
+      i++;
+    }
+    return out;
+  }
+
+  std::shared_ptr<Tensor> leakyRelu(double alpha) {
+    std::shared_ptr<Tensor> out = std::make_shared<Tensor>(this->shape);
+    int i = 0;
+    for (auto& e : this->v) {
+      std::shared_ptr<Value> curr = e->leakyRelu(alpha);
+      out->set(i, curr);
+      i++;
+    }
+    return out;
+  }
+
+  std::shared_ptr<Tensor> softmax() {
+    // Step 1: Find the maximum value for numerical stability
+    auto max_val = *std::max_element(
+        this->v.begin(),
+        this->v.end(),
+        [](const std::shared_ptr<Value>& a, const std::shared_ptr<Value>& b) {
+          return a->data < b->data;
+        });
+    // Step 2: Compute exp(x_i - max_val) for each input
+    std::shared_ptr<Tensor> exp_vals = std::make_shared<Tensor>(this->shape);
+
+    int i = 0;
+    for (auto& val : this->v) {
+      auto curr_exp_val = val->sub(max_val)->exp();
+      exp_vals->set(i, curr_exp_val);
+      i++;
+    }
+
+    // Step 3: Compute the sum of exp(x_i - max_val)
+    std::shared_ptr<Value> sum_exp = std::make_shared<Value>(0.0);
+    for (int i = 0; i <= exp_vals->maxIdx; i++) {
+      sum_exp = sum_exp->add(exp_vals->get(i));
+    }
+
+    // Step 4: Compute softmax = exp(x_i - max_val) / sum_exp
+    std::shared_ptr<Tensor> softmax_vals =
+        std::make_shared<Tensor>(this->shape);
+
+    for (int i = 0; i <= softmax_vals->maxIdx; i++) {
+      softmax_vals->set(i, exp_vals->get(i)->div(sum_exp));
+    }
+
+    return softmax_vals;
   }
 };

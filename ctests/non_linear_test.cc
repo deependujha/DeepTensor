@@ -1,7 +1,8 @@
 #include <gtest/gtest.h>
 #include <cmath>
 #include <memory>
-#include "non_linear.h"
+#include <vector>
+#include "tensor.h"
 #include "value.h"
 
 TEST(NonLinearValue, ReluTest) {
@@ -116,93 +117,97 @@ TEST(NonLinearValue, GeluTest) {
 // ========= function non-linear activations =========
 
 TEST(FunctionalNonLinear, ReluTest) {
-  std::vector<std::shared_ptr<Value>> inputs = {
-      std::make_shared<Value>(-1.0),
-      std::make_shared<Value>(0.0),
-      std::make_shared<Value>(2.0)};
-  std::vector<std::shared_ptr<Value>> outputs = NonLinear::relu(inputs);
+  std::shared_ptr<Tensor> inputs =
+      std::make_shared<Tensor>(std::vector<int>{3});
+  inputs->set(0, std::make_shared<Value>(-1.0));
+  inputs->set(1, std::make_shared<Value>(0.0));
+  inputs->set(2, std::make_shared<Value>(2.0));
+  std::shared_ptr<Tensor> outputs = inputs->relu();
 
-  ASSERT_EQ(inputs.size(), outputs.size());
-  EXPECT_DOUBLE_EQ(outputs[0]->data, 0.0);
-  EXPECT_DOUBLE_EQ(outputs[1]->data, 0.0);
-  EXPECT_DOUBLE_EQ(outputs[2]->data, 2.0);
+  ASSERT_EQ(inputs->dims(), outputs->dims());
+  EXPECT_DOUBLE_EQ(outputs->get(0)->data, 0.0);
+  EXPECT_DOUBLE_EQ(outputs->get(1)->data, 0.0);
+  EXPECT_DOUBLE_EQ(outputs->get(2)->data, 2.0);
 
   // Backward pass
-  outputs[0]->backward();
-  EXPECT_DOUBLE_EQ(inputs[0]->grad, 0.0);
-  outputs[2]->backward();
-  EXPECT_DOUBLE_EQ(inputs[2]->grad, 1.0);
+  outputs->get(0)->backward();
+  EXPECT_DOUBLE_EQ(inputs->get(0)->grad, 0.0);
+  outputs->get(2)->backward();
+  EXPECT_DOUBLE_EQ(inputs->get(2)->grad, 1.0);
 }
 
 TEST(FunctionalNonLinear, TanhTest) {
-  std::vector<std::shared_ptr<Value>> inputs = {
-      std::make_shared<Value>(-1.0),
-      std::make_shared<Value>(0.0),
-      std::make_shared<Value>(1.0)};
-  std::vector<std::shared_ptr<Value>> outputs = NonLinear::tanh(inputs);
+  std::shared_ptr<Tensor> inputs =
+      std::make_shared<Tensor>(std::vector<int>{3});
+  inputs->set(0, std::make_shared<Value>(-1.0));
+  inputs->set(1, std::make_shared<Value>(0.0));
+  inputs->set(2, std::make_shared<Value>(1.0));
+  std::shared_ptr<Tensor> outputs = inputs->tanh();
 
-  ASSERT_EQ(inputs.size(), outputs.size());
-  EXPECT_DOUBLE_EQ(outputs[0]->data, std::tanh(-1.0));
-  EXPECT_DOUBLE_EQ(outputs[1]->data, std::tanh(0.0));
-  EXPECT_DOUBLE_EQ(outputs[2]->data, std::tanh(1.0));
+  ASSERT_EQ(inputs->dims(), outputs->dims());
+  EXPECT_DOUBLE_EQ(outputs->get(0)->data, std::tanh(-1.0));
+  EXPECT_DOUBLE_EQ(outputs->get(1)->data, std::tanh(0.0));
+  EXPECT_DOUBLE_EQ(outputs->get(2)->data, std::tanh(1.0));
 
   // Backward pass
-  outputs[1]->backward();
-  EXPECT_DOUBLE_EQ(inputs[1]->grad, 1 - std::pow(std::tanh(0.0), 2));
+  outputs->get(1)->backward();
+  EXPECT_DOUBLE_EQ(inputs->get(1)->grad, 1 - std::pow(std::tanh(0.0), 2));
 }
 
 TEST(FunctionalNonLinear, SigmoidTest) {
-  std::vector<std::shared_ptr<Value>> inputs = {
-      std::make_shared<Value>(-1.0),
-      std::make_shared<Value>(0.0),
-      std::make_shared<Value>(1.0)};
-  std::vector<std::shared_ptr<Value>> outputs = NonLinear::sigmoid(inputs);
+  std::shared_ptr<Tensor> inputs =
+      std::make_shared<Tensor>(std::vector<int>{3});
+  inputs->set(0, std::make_shared<Value>(-1.0));
+  inputs->set(1, std::make_shared<Value>(0.0));
+  inputs->set(2, std::make_shared<Value>(1.0));
+  std::shared_ptr<Tensor> outputs = inputs->sigmoid();
 
-  ASSERT_EQ(inputs.size(), outputs.size());
-  EXPECT_DOUBLE_EQ(outputs[0]->data, 1 / (1 + std::exp(1.0)));
-  EXPECT_DOUBLE_EQ(outputs[1]->data, 0.5);
-  EXPECT_DOUBLE_EQ(outputs[2]->data, 1 / (1 + std::exp(-1.0)));
+  ASSERT_EQ(inputs->dims(), outputs->dims());
+  EXPECT_DOUBLE_EQ(outputs->get(0)->data, 1 / (1 + std::exp(1.0)));
+  EXPECT_DOUBLE_EQ(outputs->get(1)->data, 0.5);
+  EXPECT_DOUBLE_EQ(outputs->get(2)->data, 1 / (1 + std::exp(-1.0)));
 
   // Backward pass
-  outputs[1]->backward();
-  EXPECT_DOUBLE_EQ(inputs[1]->grad, 0.25); // Sigmoid'(0.0) = 0.5 * 0.5
+  outputs->get(1)->backward();
+  EXPECT_DOUBLE_EQ(inputs->get(1)->grad, 0.25); // Sigmoid'(0.0) = 0.5 * 0.5
 }
 
 TEST(FunctionalNonLinear, LeakyReluTest) {
   double alpha = 0.1;
-  std::vector<std::shared_ptr<Value>> inputs = {
-      std::make_shared<Value>(-1.0),
-      std::make_shared<Value>(0.0),
-      std::make_shared<Value>(2.0)};
-  std::vector<std::shared_ptr<Value>> outputs =
-      NonLinear::leakyRelu(alpha, inputs);
+  std::shared_ptr<Tensor> inputs =
+      std::make_shared<Tensor>(std::vector<int>{3});
+  inputs->set(0, std::make_shared<Value>(-1.0));
+  inputs->set(1, std::make_shared<Value>(0.0));
+  inputs->set(2, std::make_shared<Value>(2.0));
+  std::shared_ptr<Tensor> outputs = inputs->leakyRelu(alpha);
 
-  ASSERT_EQ(inputs.size(), outputs.size());
-  EXPECT_DOUBLE_EQ(outputs[0]->data, -0.1);
-  EXPECT_DOUBLE_EQ(outputs[1]->data, 0.0);
-  EXPECT_DOUBLE_EQ(outputs[2]->data, 2.0);
+  ASSERT_EQ(inputs->dims(), outputs->dims());
+  EXPECT_DOUBLE_EQ(outputs->get(0)->data, -0.1);
+  EXPECT_DOUBLE_EQ(outputs->get(1)->data, 0.0);
+  EXPECT_DOUBLE_EQ(outputs->get(2)->data, 2.0);
 
   // Backward pass
-  outputs[0]->backward();
+  outputs->get(0)->backward();
   EXPECT_DOUBLE_EQ(
-      inputs[0]->grad, alpha); // Gradient = alpha for negative values
+      inputs->get(0)->grad, alpha); // Gradient = alpha for negative values
 }
 
 TEST(FunctionalNonLinear, SoftmaxTest) {
-  std::vector<std::shared_ptr<Value>> inputs{
-      std::make_shared<Value>(1.0),
-      std::make_shared<Value>(2.0),
-      std::make_shared<Value>(3.0)};
-  std::vector<std::shared_ptr<Value>> outputs = NonLinear::softmax(inputs);
+  std::shared_ptr<Tensor> inputs =
+      std::make_shared<Tensor>(std::vector<int>{3});
+  inputs->set(0, std::make_shared<Value>(1.0));
+  inputs->set(1, std::make_shared<Value>(2.0));
+  inputs->set(2, std::make_shared<Value>(3.0));
+  std::shared_ptr<Tensor> outputs = inputs->softmax();
 
-    ASSERT_EQ(inputs.size(), outputs.size());
+  ASSERT_EQ(inputs->dims(), outputs->dims());
 
-    double sum = std::exp(1.0) + std::exp(2.0) + std::exp(3.0);
-    EXPECT_NEAR(outputs[0]->data, std::exp(1.0) / sum, 1e-5);
-    EXPECT_NEAR(outputs[1]->data, std::exp(2.0) / sum, 1e-5);
-    EXPECT_NEAR(outputs[2]->data, std::exp(3.0) / sum, 1e-5);
+  double sum = std::exp(1.0) + std::exp(2.0) + std::exp(3.0);
+  EXPECT_NEAR(outputs->get(0)->data, std::exp(1.0) / sum, 1e-5);
+  EXPECT_NEAR(outputs->get(1)->data, std::exp(2.0) / sum, 1e-5);
+  EXPECT_NEAR(outputs->get(2)->data, std::exp(3.0) / sum, 1e-5);
 
-    // Backward pass
-    outputs[1]->backward();
-    EXPECT_NE(inputs[0]->grad, double(0));
+  // Backward pass
+  outputs->get(1)->backward();
+  EXPECT_NE(inputs->get(0)->grad, double(0));
 }
