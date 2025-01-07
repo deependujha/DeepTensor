@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include "tensor.h"
 #include "utils.h"
 #include "value.h"
 
@@ -85,57 +86,24 @@ public:
   }
 };
 
-class Layer : public Module {
-private:
-  int nin; // no_of_inputs
-  int nout; // no_of_outputs
-  bool nonlin = false;
-  int seed = 42;
-  std::vector<std::shared_ptr<Neuron>> neurons;
-
-  void _initialize() {
-    for (int i = 0; i < this->nout; i++) {
-      std::shared_ptr<Neuron> tmp_n = std::make_shared<Neuron>(
-          this->nin, this->nonlin, this->seed + (1000 * i));
-      neurons.push_back(tmp_n);
-    }
-  }
-
+class Layer {
 public:
-  Layer(int nin, int nout) : nin(nin), nout(nout) {
-    _initialize();
-  }
-  Layer(int nin, int nout, bool nonlin) : nin(nin), nout(nout), nonlin(nonlin) {
-    _initialize();
-  }
-  Layer(int nin, int nout, bool nonlin, int seed)
-      : nin(nin), nout(nout), nonlin(nonlin), seed(seed) {
-    _initialize();
-  }
+  virtual ~Layer() = default;
 
-  std::vector<std::shared_ptr<Value>> call(
-      std::vector<std::shared_ptr<Value>> input) {
-    std::vector<std::shared_ptr<Value>> out;
-    for (int i = 0; i < this->nout; i++) {
-      std::shared_ptr<Value> tmp = this->neurons[i]->call(input);
-      out.push_back(tmp);
+  virtual std::shared_ptr<Tensor> call(
+      std::shared_ptr<Tensor> input,
+      bool using_cuda) = 0;
+
+  virtual std::vector<std::shared_ptr<Value>> parameters() = 0;
+
+  virtual std::string printMe() = 0;
+
+  void zero_grad() {
+    std::vector<std::shared_ptr<Value>> p = this->parameters();
+
+    for (auto& e : p) {
+      e->grad = 0;
     }
-    return out;
-  }
-
-  std::vector<std::shared_ptr<Value>> parameters() override {
-    std::vector<std::shared_ptr<Value>> p;
-    for (auto& e : neurons) {
-      auto _ep = e->parameters();
-      p.insert(p.end(), _ep.begin(), _ep.end());
-    }
-    return p;
-  }
-
-  std::string printMe() {
-    std::string s = "Layer(" + std::to_string(this->nin) + "," +
-        std::to_string(this->nout) + ")";
-    return s;
   }
 };
 
@@ -199,4 +167,51 @@ public:
     s += "]";
     return s;
   }
+};
+
+class Model : public Module {
+public:
+  bool using_cuda = false;
+  std::vector<std::shared_ptr<Layer>> layers;
+
+  Model(std::vector<std::shared_ptr<Layer>> layers, bool using_cuda)
+      : layers(std::move(layers)), using_cuda(using_cuda) {}
+
+  std::shared_ptr<Tensor> call(std::shared_ptr<Tensor> input) {
+    std::shared_ptr<Tensor> out = input;
+    for (auto& e : this->layers) {
+      out = e->call(out, this->using_cuda);
+    }
+    return out;
+  }
+
+  std::vector<std::shared_ptr<Value>> parameters() override {
+    std::vector<std::shared_ptr<Value>> p;
+    for (auto& e : this->layers) {
+      auto _ep = e->parameters();
+      p.insert(p.end(), _ep.begin(), _ep.end());
+    }
+    return p;
+  }
+
+  void zero_grad() {
+    for (auto& e : this->layers) {
+      e->zero_grad();
+    }
+  }
+
+  std::string printMe() {
+    std::string s = "Model(\n";
+    for (auto& e : this->layers) {
+      s += "\t";
+      s += e->printMe();
+      s += ",\n";
+    }
+    s += ")";
+    return s;
+  }
+
+  void save_model(std::string filename) {}
+
+  void load_model(std::string filename) {}
 };
