@@ -30,7 +30,8 @@ jobs:
 
       - name: Build cpp project and run test
         run: |
-          cd build \
+          mkdir build \
+          && cd build \
           && cmake .. \
           && cmake --build . \
           && ctest --rerun-failed --output-on-failure
