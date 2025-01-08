@@ -85,8 +85,8 @@ TEST(NonLinearValue, LeakyReluTest) {
 
 /// chatgpt wrote this grad computation for gelu function
 double gelu_grad(double x) {
-  const double k = std::sqrt(2.0 / M_PI);
-  const double c = 0.044715;
+  double k = std::sqrt(2.0 / M_PI);
+  double c = 0.044715;
   double tanh_input = k * (x + c * x * x * x);
   double tanh_val = std::tanh(tanh_input);
   double sech2 = 1 - tanh_val * tanh_val; // sech^2(x) = 1 - tanh^2(x)

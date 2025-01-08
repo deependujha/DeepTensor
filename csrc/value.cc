@@ -335,8 +335,8 @@ std::shared_ptr<Value> Value::leakyRelu(double alpha) {
 
 std::shared_ptr<Value> Value::gelu() {
   // Constants for GELU approximation
-  const double sqrt2OverPi = std::sqrt(2.0 / M_PI);
-  const double coeff = 0.044715;
+  double sqrt2OverPi = std::sqrt(2.0 / M_PI);
+  double coeff = 0.044715;
 
   // Forward pass: compute GELU(x)
   double tanhArg = sqrt2OverPi * (this->data + coeff * std::pow(this->data, 3));
