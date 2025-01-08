@@ -54,7 +54,7 @@ model = Model(
         Sigmoid(),
     ],
     False,  # using_cuda
-)  # 2-layer neural network
+)
 
 print(model)
 
