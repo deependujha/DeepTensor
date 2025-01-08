@@ -121,43 +121,61 @@ PYBIND11_MODULE(_core, m) {
       .def("softmax", &Tensor::softmax);
 
   //   exposing Layer class
-  py::class_<FeedForwardLayer, std::shared_ptr<FeedForwardLayer>>(
+  py::class_<Layer, std::shared_ptr<Layer>>(m, "Layer")
+      .def("zero_grad", &Layer::zero_grad)
+      .def("__call__", &Layer::call)
+      .def("parameters", &Layer::parameters)
+      .def("__repr__", &Layer::printMe);
+
+  py::class_<FeedForwardLayer, Layer, std::shared_ptr<FeedForwardLayer>>(
       m, "FeedForwardLayer")
       .def(py::init<int, int>())
       .def(py::init<int, int, int>())
       .def("zero_grad", &FeedForwardLayer::zero_grad)
+      .def("parameters", &FeedForwardLayer::parameters)
       .def("__call__", &FeedForwardLayer::call)
       .def("__repr__", &FeedForwardLayer::printMe);
 
-  py::class_<ReLu, std::shared_ptr<ReLu>>(m, "ReLu")
+  py::class_<ReLu, Layer, std::shared_ptr<ReLu>>(m, "ReLu")
+      .def(py::init<>())
       .def("zero_grad", &ReLu::zero_grad)
       .def("__call__", &ReLu::call)
+      .def("parameters", &ReLu::parameters)
       .def("__repr__", &ReLu::printMe);
 
-  py::class_<GeLu, std::shared_ptr<GeLu>>(m, "GeLu")
+  py::class_<GeLu, Layer, std::shared_ptr<GeLu>>(m, "GeLu")
+      .def(py::init<>())
       .def("zero_grad", &GeLu::zero_grad)
       .def("__call__", &GeLu::call)
+      .def("parameters", &GeLu::parameters)
       .def("__repr__", &GeLu::printMe);
 
-  py::class_<Sigmoid, std::shared_ptr<Sigmoid>>(m, "Sigmoid")
+  py::class_<Sigmoid, Layer, std::shared_ptr<Sigmoid>>(m, "Sigmoid")
+      .def(py::init<>())
       .def("zero_grad", &Sigmoid::zero_grad)
       .def("__call__", &Sigmoid::call)
+      .def("parameters", &Sigmoid::parameters)
       .def("__repr__", &Sigmoid::printMe);
 
-  py::class_<Tanh, std::shared_ptr<Tanh>>(m, "Tanh")
+  py::class_<Tanh, Layer, std::shared_ptr<Tanh>>(m, "Tanh")
+      .def(py::init<>())
       .def("zero_grad", &Tanh::zero_grad)
       .def("__call__", &Tanh::call)
+      .def("parameters", &Tanh::parameters)
       .def("__repr__", &Tanh::printMe);
 
-  py::class_<LeakyReLu, std::shared_ptr<LeakyReLu>>(m, "LeakyReLu")
+  py::class_<LeakyReLu, Layer, std::shared_ptr<LeakyReLu>>(m, "LeakyReLu")
       .def(py::init<double>())
       .def("zero_grad", &LeakyReLu::zero_grad)
       .def("__call__", &LeakyReLu::call)
+      .def("parameters", &LeakyReLu::parameters)
       .def("__repr__", &LeakyReLu::printMe);
 
-  py::class_<SoftMax, std::shared_ptr<SoftMax>>(m, "SoftMax")
+  py::class_<SoftMax, Layer, std::shared_ptr<SoftMax>>(m, "SoftMax")
+      .def(py::init<>())
       .def("zero_grad", &SoftMax::zero_grad)
       .def("__call__", &SoftMax::call)
+      .def("parameters", &SoftMax::parameters)
       .def("__repr__", &SoftMax::printMe);
 
   //   exposing Model class
@@ -168,6 +186,7 @@ PYBIND11_MODULE(_core, m) {
       .def("zero_grad", &Model::zero_grad)
       .def("save_model", &Model::save_model)
       .def("load_model", &Model::load_model)
+      .def("parameters", &Model::parameters)
       .def("__call__", &Model::call)
       .def("__repr__", &Model::printMe);
 }
