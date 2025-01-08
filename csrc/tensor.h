@@ -34,6 +34,15 @@ public:
     maxIdx--; // 1 less
   }
 
+  std::string tensor_shape_str() {
+    std::string shape_str = "(";
+    for (auto& e : this->shape) {
+      shape_str += std::to_string(e) + ", ";
+    }
+    shape_str += ")";
+    return shape_str;
+  }
+
   void set(std::vector<int> idx, std::shared_ptr<Value> _v) {
     int original_idx = normalize_idx(idx);
     if ((original_idx < this->minIdx) || (original_idx > this->maxIdx)) {
