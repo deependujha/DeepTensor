@@ -6,6 +6,3 @@
 [submodule "external/googletests"]
 	path = external/googletests
 	url = https://github.com/google/googletest
-[submodule "external/jsoncpp"]
-	path = external/jsoncpp
-	url = git@github.com:open-source-parsers/jsoncpp.git

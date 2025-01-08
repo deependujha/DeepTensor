@@ -1,7 +1,9 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include "layers/feed_forward_layer.h"
+#include "layers/non_linear_layer.h"
 #include "neural_network.h"
+#include "tensor.h"
 #include "value.h"
 
 namespace py = pybind11;
@@ -49,12 +51,12 @@ PYBIND11_MODULE(_core, m) {
       .def(
           "__sub__",
           static_cast<std::shared_ptr<Value> (Value::*)(
-              std::shared_ptr<Value>)>(&Value::mul),
+              std::shared_ptr<Value>)>(&Value::sub),
           "subtract value object with value object")
       .def(
           "__rsub__",
           static_cast<std::shared_ptr<Value> (Value::*)(
-              std::shared_ptr<Value>)>(&Value::mul),
+              std::shared_ptr<Value>)>(&Value::sub),
           "subtract value object with value object")
       .def(
           "__mul__",
@@ -87,17 +89,82 @@ PYBIND11_MODULE(_core, m) {
           static_cast<std::shared_ptr<Value> (Value::*)()>(&Value::relu),
           "apply relu operation");
 
+  // exposing tensor class
+  py::class_<Tensor, std::shared_ptr<Tensor>>(m, "Tensor")
+      .def(py::init<std::vector<int>>())
+      .def(
+          "set",
+          static_cast<void (Tensor::*)(
+              std::vector<int>, std::shared_ptr<Value>)>(&Tensor::set))
+      .def(
+          "set",
+          static_cast<void (Tensor::*)(int, std::shared_ptr<Value>)>(
+              &Tensor::set))
+      .def(
+          "get",
+          static_cast<std::shared_ptr<Value> (Tensor::*)(int)>(&Tensor::get))
+      .def(
+          "get",
+          static_cast<std::shared_ptr<Value> (Tensor::*)(std::vector<int>)>(
+              &Tensor::get))
+      .def("normalize_idx", &Tensor::normalize_idx)
+      .def("backward", &Tensor::backward)
+      .def("zero_grad", &Tensor::zero_grad)
+      .def("add", &Tensor::add)
+      .def("div", &Tensor::div)
+      .def("matmul", &Tensor::matmul)
+      .def("relu", &Tensor::relu)
+      .def("gelu", &Tensor::gelu)
+      .def("sigmoid", &Tensor::sigmoid)
+      .def("tanh", &Tensor::tanh)
+      .def("leakyRelu", &Tensor::leakyRelu)
+      .def("softmax", &Tensor::softmax);
+
   //   exposing Layer class
-  py::class_<FeedForwardLayer, std::shared_ptr<FeedForwardLayer>>(m, "FeedForwardLayer")
+  py::class_<FeedForwardLayer, std::shared_ptr<FeedForwardLayer>>(
+      m, "FeedForwardLayer")
       .def(py::init<int, int>())
       .def(py::init<int, int, int>())
       .def("zero_grad", &FeedForwardLayer::zero_grad)
       .def("__call__", &FeedForwardLayer::call)
       .def("__repr__", &FeedForwardLayer::printMe);
 
-  //   exposing MLP class
+  py::class_<ReLu, std::shared_ptr<ReLu>>(m, "ReLu")
+      .def("zero_grad", &ReLu::zero_grad)
+      .def("__call__", &ReLu::call)
+      .def("__repr__", &ReLu::printMe);
+
+  py::class_<GeLu, std::shared_ptr<GeLu>>(m, "GeLu")
+      .def("zero_grad", &GeLu::zero_grad)
+      .def("__call__", &GeLu::call)
+      .def("__repr__", &GeLu::printMe);
+
+  py::class_<Sigmoid, std::shared_ptr<Sigmoid>>(m, "Sigmoid")
+      .def("zero_grad", &Sigmoid::zero_grad)
+      .def("__call__", &Sigmoid::call)
+      .def("__repr__", &Sigmoid::printMe);
+
+  py::class_<Tanh, std::shared_ptr<Tanh>>(m, "Tanh")
+      .def("zero_grad", &Tanh::zero_grad)
+      .def("__call__", &Tanh::call)
+      .def("__repr__", &Tanh::printMe);
+
+  py::class_<LeakyReLu, std::shared_ptr<LeakyReLu>>(m, "LeakyReLu")
+      .def(py::init<double>())
+      .def("zero_grad", &LeakyReLu::zero_grad)
+      .def("__call__", &LeakyReLu::call)
+      .def("__repr__", &LeakyReLu::printMe);
+
+  py::class_<SoftMax, std::shared_ptr<SoftMax>>(m, "SoftMax")
+      .def("zero_grad", &SoftMax::zero_grad)
+      .def("__call__", &SoftMax::call)
+      .def("__repr__", &SoftMax::printMe);
+
+  //   exposing Model class
   py::class_<Model, std::shared_ptr<Model>>(m, "Model")
       .def(py::init<std::vector<std::shared_ptr<Layer>>, bool>())
+      .def_readwrite("using_cuda", &Model::using_cuda)
+      .def_readwrite("layers", &Model::layers)
       .def("zero_grad", &Model::zero_grad)
       .def("save_model", &Model::save_model)
       .def("load_model", &Model::load_model)

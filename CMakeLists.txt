@@ -15,28 +15,9 @@ option(BUILD_PYBIND "Build pybind" ON) # for pybind
 project(${SKBUILD_PROJECT_NAME} VERSION 1.0.0 LANGUAGES CXX)
 
 
-add_subdirectory(external/jsoncpp)
 add_subdirectory(csrc)
 
-# ------- add jsoncpp lib -------
-add_definitions(-D_GLIBCXX_USE_CXX11_ABI)
-
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    add_compile_options(-Wall -Wextra)
-elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    add_definitions(
-        -D_SCL_SECURE_NO_WARNINGS
-        -D_CRT_SECURE_NO_WARNINGS
-        -D_WIN32_WINNT=0x601
-        -D_WINSOCK_DEPRECATED_NO_WARNINGS
-    )
-endif()
-
 include_directories("${CMAKE_SOURCE_DIR}/csrc")
-
-target_link_libraries(${DEEPTENSOR_LIBS} jsoncpp_lib)
-
-# ------- ------- ------- -------
 
 # the -fPIC (Position Independent Code) flag, which is required when linking static library (deeptensor_libs) it into a shared object (pybind module)
 set_target_properties(${DEEPTENSOR_LIBS} PROPERTIES POSITION_INDEPENDENT_CODE ON)

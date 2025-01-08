@@ -8,8 +8,6 @@ set(
     value_fixture_test.cc
     nn_test.cc
     rn_gen_test.cc
-    jsoncpp_read_test.cc
-    jsoncpp_write_test.cc
     non_linear_test.cc
     tensor_test.cc
     )
