@@ -46,8 +46,11 @@ public:
   std::shared_ptr<Tensor> call(std::shared_ptr<Tensor> input, bool using_cuda)
       override {
     if (input->shape[0] != this->nin) {
-      throw std::invalid_argument(
-          "Input tensor shape mismatch with layer's weights.");
+      std::string error_msg =
+          "Input tensor shape mismatch with layer's weights. Expected input size: " +
+          std::to_string(this->nin) +
+          ", but got input of size: " + std::to_string(input->shape[0]);
+      throw std::invalid_argument(error_msg);
     }
     std::shared_ptr<Tensor> out = input->matmul(this->weights)->add(this->bias);
     return out;
@@ -62,5 +65,16 @@ public:
     std::string s = "Layer(" + std::to_string(this->nin) + "," +
         std::to_string(this->nout) + ")";
     return s;
+  }
+
+  std::vector<std::shared_ptr<Value>> parameters() override {
+    std::vector<std::shared_ptr<Value>> out;
+    for (int i = 0; i <= this->weights->maxIdx; i++) {
+      out.push_back(this->weights->get(i));
+    }
+    for (int i = 0; i <= this->bias->maxIdx; i++) {
+      out.push_back(this->bias->get(i));
+    }
+    return out;
   }
 };

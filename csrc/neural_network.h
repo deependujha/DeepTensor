@@ -16,6 +16,8 @@ public:
 
   virtual std::string printMe() = 0;
 
+  virtual std::vector<std::shared_ptr<Value>> parameters() = 0;
+
   virtual void zero_grad() = 0;
 };
 
@@ -50,6 +52,15 @@ public:
     }
     s += ")";
     return s;
+  }
+
+  std::vector<std::shared_ptr<Value>> parameters() {
+    std::vector<std::shared_ptr<Value>> out;
+    for (auto& e : this->layers) {
+      std::vector<std::shared_ptr<Value>> curr = e->parameters();
+      out.insert(out.end(), curr.begin(), curr.end());
+    }
+    return out;
   }
 
   void save_model(std::string filename) {}

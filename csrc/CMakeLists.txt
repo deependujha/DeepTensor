@@ -1,7 +1,6 @@
 set(
     tensor_libs_file
     value.cc
-    jsoncpp.cc
     tensor.cc
 )
 

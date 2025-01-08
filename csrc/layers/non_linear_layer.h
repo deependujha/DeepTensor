@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include "../neural_network.h"
 
 class ReLu : public Layer {
@@ -13,6 +14,11 @@ public:
   }
 
   void zero_grad() override {};
+
+  std::vector<std::shared_ptr<Value>> parameters() override {
+    // no parameters
+    return std::vector<std::shared_ptr<Value>>{};
+  }
 };
 
 class GeLu : public Layer {
@@ -27,6 +33,11 @@ public:
   }
 
   void zero_grad() override {};
+
+  std::vector<std::shared_ptr<Value>> parameters() override {
+    // no parameters
+    return std::vector<std::shared_ptr<Value>>{};
+  }
 };
 
 class Tanh : public Layer {
@@ -41,6 +52,11 @@ public:
   }
 
   void zero_grad() override {};
+
+  std::vector<std::shared_ptr<Value>> parameters() override {
+    // no parameters
+    return std::vector<std::shared_ptr<Value>>{};
+  }
 };
 
 class Sigmoid : public Layer {
@@ -55,6 +71,11 @@ public:
   }
 
   void zero_grad() override {};
+
+  std::vector<std::shared_ptr<Value>> parameters() override {
+    // no parameters
+    return std::vector<std::shared_ptr<Value>>{};
+  }
 };
 
 class LeakyReLu : public Layer {
@@ -67,10 +88,15 @@ public:
   }
 
   std::string printMe() override {
-    return "LeakyReLu()";
+    return "LeakyReLu(" + std::to_string(this->alpha) + ")";
   }
 
   void zero_grad() override {};
+
+  std::vector<std::shared_ptr<Value>> parameters() override {
+    // no parameters
+    return std::vector<std::shared_ptr<Value>>{};
+  }
 };
 
 class SoftMax : public Layer {
@@ -85,4 +111,9 @@ public:
   }
 
   void zero_grad() override {};
+
+  std::vector<std::shared_ptr<Value>> parameters() override {
+    // no parameters
+    return std::vector<std::shared_ptr<Value>>{};
+  }
 };
