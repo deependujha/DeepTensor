@@ -118,7 +118,9 @@ PYBIND11_MODULE(_core, m) {
       .def("sigmoid", &Tensor::sigmoid)
       .def("tanh", &Tensor::tanh)
       .def("leakyRelu", &Tensor::leakyRelu)
-      .def("softmax", &Tensor::softmax);
+      .def("softmax", &Tensor::softmax)
+      .def("__repr__", &Tensor::printMe);
+
 
   //   exposing Layer class
   py::class_<Layer, std::shared_ptr<Layer>>(m, "Layer")

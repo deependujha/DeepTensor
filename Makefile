@@ -17,7 +17,7 @@ test:
 ctest:
 	@mkdir -p build \
 		&& cd build \
-		&& cmake -DBUILD_TESTS=ON -DBUILD_PYBIND=OFF .. \
+		&& cmake -DBUILD_TESTS=ON -DBUILD_PYBIND=ON .. \
 		&& cmake --build . \
 		&& ctest
 

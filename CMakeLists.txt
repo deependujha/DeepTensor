@@ -7,6 +7,14 @@ set(CMAKE_CXX_STANDARD          17) # set c++ standard to 17
 set(CMAKE_CXX_STANDARD_REQUIRED ON) # without cpp 17, compiler will give error
 set(CMAKE_CXX_EXTENSIONS        OFF) # it's fine to use c++ 17 without extensions (like, bits/stdc++.h)
 option(CMAKE_EXPORT_COMPILE_COMMANDS "Generate compile_commands.json" ON) # for clang-tidy
+# Option to enable debug logging
+option(ENABLE_DEBUG "Enable debug logging" OFF)
+
+# Add a preprocessor definition based on the ENABLE_DEBUG option
+if (ENABLE_DEBUG)
+    add_compile_definitions(DEBUG)
+endif()
+
 
 option(BUILD_TESTS "Build tests" ON) # for googletest
 option(BUILD_PYBIND "Build pybind" ON) # for pybind

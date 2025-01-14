@@ -10,6 +10,7 @@ set(
     rn_gen_test.cc
     non_linear_test.cc
     tensor_test.cc
+    loss_test.cc
     )
 
 add_executable(TEST_CODE ${TEST_CODE})

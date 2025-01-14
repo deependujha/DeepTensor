@@ -68,6 +68,7 @@ public:
   std::shared_ptr<Value> pow(int n);
   std::shared_ptr<Value> neg();
   std::shared_ptr<Value> exp();
+  std::shared_ptr<Value> ln();
 
   // non-linear functions
   std::shared_ptr<Value> relu();

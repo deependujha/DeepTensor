@@ -1,9 +1,12 @@
 #include "value.h"
+#include <cassert>
 #include <cmath>
+#include <iostream>
 #include <memory>
+#include <stdexcept>
+#include <string>
 #include <unordered_set>
 #include <vector>
-#include <cassert>
 
 /// BuildTopo
 /// if not already visited the node, mark it visited, and then subsequently
@@ -40,7 +43,9 @@ void Value::backward() {
   this->grad = 1.0;
 
   // Iterating the vector in reverse order
+  std::cout << "topo list: \n";
   for (int i = int(topo_list.size()) - 1; i >= 0; i--) {
+    std::cout << "i: " << i << "; node: " << topo_list[i]->printMe() << "\n";
     topo_list[i]->executeBackWardMethod();
   }
 }
@@ -241,6 +246,27 @@ std::shared_ptr<Value> Value::exp() {
   // Define the backward function
   std::function<void()> add_backward = [this, newVal]() {
     this->grad += (newVal->data * newVal->grad); // e^x => e^x
+  };
+
+  newVal->setBackWardMethod(add_backward);
+
+  return newVal;
+}
+
+std::shared_ptr<Value> Value::ln() {
+  if (this->data <= 0) {
+    throw std::runtime_error(
+        "Natural log is not defined for numbers less than or equal to 0. Got" +
+        std::to_string(this->data));
+  }
+  double newData = std::log(this->data);
+  std::unordered_set<std::shared_ptr<Value>> prev = {shared_from_this()};
+  std::shared_ptr<Value> newVal =
+      std::make_shared<Value>(newData, std::move(prev), 'l');
+
+  // Define the backward function
+  std::function<void()> add_backward = [this, newVal]() {
+    this->grad += ((1 / (this->data)) * newVal->grad); // ln(x) => 1/x
   };
 
   newVal->setBackWardMethod(add_backward);

@@ -306,4 +306,9 @@ public:
 
     return softmax_vals;
   }
+
+  std::string printMe() {
+    std::string my_shape = "tensor of shape: " + tensor_shape_str();
+    return my_shape;
+  }
 };
