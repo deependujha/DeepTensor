@@ -1,5 +1,4 @@
 #include "loss.h"
-#include <__xlocale.h>
 #include <memory>
 #include <stdexcept>
 #include "value.h"
