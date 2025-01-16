@@ -74,9 +74,3 @@ out = model(tensor_input)
 - Train a character-level transformer model
 - Add support for DDP
 - Add support for CUDA execution
-
----
-
-## To be done later
-
-- Add support for optimizers (sgd, nesterov, adam, etc)
