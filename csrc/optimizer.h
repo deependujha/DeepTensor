@@ -9,6 +9,7 @@ class Optimizer {
 public:
   virtual ~Optimizer() = default;
   virtual void step() = 0;
+  virtual void zero_grad() = 0;
 };
 
 // stochastic gradient descent
@@ -26,6 +27,10 @@ public:
     for (auto& e : m_para) {
       e->data = e->data - this->learning_rate * e->grad;
     }
+  }
+
+  void zero_grad() override {
+    m->zero_grad();
   }
 };
 
@@ -54,6 +59,10 @@ public:
       velocity[i] = this->decay_factor * velocity[i] + m_para[i]->grad;
       m_para[i]->data = m_para[i]->data - this->learning_rate * velocity[i];
     }
+  }
+
+  void zero_grad() override {
+    m->zero_grad();
   }
 };
 
@@ -88,6 +97,10 @@ public:
 //       m_para[i]->data = m_para[i]->data - this->learning_rate * velocity[i];
 //     }
 //   }
+
+// void zero_grad() override {
+//     m->zero_grad();
+//   }
 // };
 
 // AdaGrad (Adaptive Gradient Algorithm) - great for sparse datasets
@@ -113,6 +126,10 @@ public:
           (this->learning_rate * m_para[i]->grad) /
               std::sqrt(prev_grad_square[i] + this->epsilon);
     }
+  }
+
+  void zero_grad() override {
+    m->zero_grad();
   }
 };
 
@@ -152,6 +169,10 @@ public:
           (learning_rate * m_para[i]->grad) /
               std::sqrt(prev_grad_square[i] + epsilon);
     }
+  }
+
+  void zero_grad() override {
+    m->zero_grad();
   }
 };
 
@@ -214,5 +235,9 @@ public:
               std::sqrt(corrected_grad_square + epsilon);
     }
     this->time++;
+  }
+
+  void zero_grad() override {
+    m->zero_grad();
   }
 };

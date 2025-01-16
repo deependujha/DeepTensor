@@ -196,27 +196,32 @@ PYBIND11_MODULE(_core, m) {
 
   //   Optimzer class
   py::class_<Optimizer, std::shared_ptr<Optimizer>>(m, "Optimizer")
-      .def("step", &Optimizer::step);
+      .def("step", &Optimizer::step)
+      .def("zero_grad", &Optimizer::zero_grad);
 
   py::class_<SGD, std::shared_ptr<SGD>>(m, "SGD")
       .def(py::init<std::shared_ptr<Model>, double>())
       .def_readwrite("learning_rate", &SGD::learning_rate)
+      .def("zero_grad", &SGD::zero_grad)
       .def("step", &SGD::step);
 
   py::class_<Momentum, std::shared_ptr<Momentum>>(m, "Momentum")
       .def(py::init<std::shared_ptr<Model>, double, double>())
       .def_readwrite("learning_rate", &Momentum::learning_rate)
+      .def("zero_grad", &Momentum::zero_grad)
       .def_readwrite("decay_factor", &Momentum::decay_factor)
       .def("step", &Momentum::step);
 
   py::class_<AdaGrad, std::shared_ptr<AdaGrad>>(m, "AdaGrad")
       .def(py::init<std::shared_ptr<Model>, double>())
       .def_readwrite("learning_rate", &AdaGrad::learning_rate)
+      .def("zero_grad", &AdaGrad::zero_grad)
       .def("step", &AdaGrad::step);
 
   py::class_<RMSprop, std::shared_ptr<RMSprop>>(m, "RMSprop")
       .def(py::init<std::shared_ptr<Model>, double>())
       .def(py::init<std::shared_ptr<Model>, double, double>())
+      .def("zero_grad", &RMSprop::zero_grad)
       .def_readwrite("learning_rate", &RMSprop::learning_rate)
       .def_readwrite("decay_factor", &RMSprop::decay_factor)
       .def("step", &RMSprop::step);
@@ -225,6 +230,7 @@ PYBIND11_MODULE(_core, m) {
       .def(py::init<std::shared_ptr<Model>, double>())
       .def(py::init<std::shared_ptr<Model>, double, double, double>())
       .def_readwrite("learning_rate", &Adam::learning_rate)
+      .def("zero_grad", &Adam::zero_grad)
       .def_readwrite("beta1", &Adam::beta1)
       .def_readwrite("beta2", &Adam::beta2)
       .def("step", &Adam::step);
