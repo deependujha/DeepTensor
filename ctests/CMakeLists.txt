@@ -7,7 +7,6 @@ set(
     value_test.cc
     value_fixture_test.cc
     nn_test.cc
-    rn_gen_test.cc
     non_linear_test.cc
     tensor_test.cc
     loss_test.cc

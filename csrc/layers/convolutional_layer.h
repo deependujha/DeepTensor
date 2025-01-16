@@ -11,6 +11,9 @@ private:
   int kernel_size;
   int stride;
   int padding;
+  int seed = -1;
+  std::string technique = constant::HE;
+  std::string mode = constant::NORMAL;
   std::shared_ptr<Tensor>
       weights; // Shape: [out_channels, in_channels, kernel_size, kernel_size]
   std::shared_ptr<Tensor> bias; // Shape: [out_channels]
@@ -21,7 +24,12 @@ private:
         std::vector<int>{out_channels, in_channels, kernel_size, kernel_size});
     this->bias = std::make_shared<Tensor>(std::vector<int>{out_channels});
 
-    RandomNumberGenerator rng(42); // Use a seed for reproducibility
+    // Determine the seed to use
+    int seed_to_use = (this->seed == -1) ? 42 : this->seed;
+
+    // Create the RandomNumberGenerator
+    RandomNumberGenerator rng(
+        this->technique, this->mode, this->in_channels, this->out_channels, seed_to_use);
     for (int oc = 0; oc < out_channels; ++oc) {
       for (int ic = 0; ic < in_channels; ++ic) {
         for (int kh = 0; kh < kernel_size; ++kh) {
@@ -47,6 +55,35 @@ public:
         kernel_size(kernel_size),
         stride(stride),
         padding(padding) {
+    _initialize();
+  }
+  Conv2D(
+      int in_channels,
+      int out_channels,
+      int kernel_size,
+      int stride,
+      int padding,
+      int seed,
+      const std::string& technique,
+      const std::string& mode)
+      : in_channels(in_channels),
+        out_channels(out_channels),
+        kernel_size(kernel_size),
+        stride(stride),
+        padding(padding) {
+    if (technique != constant::HE && technique != constant::XAVIER) {
+      throw std::runtime_error(
+          "FeedForward layer expects 'technique' to be either 'XAVIER' or 'HE'. Got: " +
+          technique);
+    }
+    if (mode != constant::UNIFORM && mode != constant::NORMAL) {
+      throw std::runtime_error(
+          "FeedForward layer expects 'mode' to be either 'UNIFORM' or 'NORMAL'. Got: " +
+          mode);
+    }
+    this->seed = seed;
+    this->technique = technique;
+    this->mode = mode;
     _initialize();
   }
 

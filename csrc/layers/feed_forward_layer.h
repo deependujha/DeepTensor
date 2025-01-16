@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <string>
+#include "../constant.h"
 #include "../neural_network.h"
 #include "../tensor.h"
 #include "../utils.h"
@@ -9,17 +10,23 @@ class FeedForwardLayer : public Layer {
 private:
   int nin; // no_of_inputs
   int nout; // no_of_outputs
-  int seed = 42;
+  int seed = -1;
   std::shared_ptr<Tensor> weights; // nin * nout (nout rows of nin values)
   std::shared_ptr<Tensor> bias; // nin * nout (nout rows of nin values)
+  std::string technique = constant::HE;
+  std::string mode = constant::NORMAL;
 
   void _initialize() {
     this->weights =
         std::make_shared<Tensor>(std::vector<int>{this->nin, this->nout});
     this->bias = std::make_shared<Tensor>(std::vector<int>{this->nout});
 
-    // Create two instances of RandomNumberGenerator with the same seed
-    RandomNumberGenerator rng(this->seed);
+    // Determine the seed to use
+    int seed_to_use = (this->seed == -1) ? 42 : this->seed;
+
+    // Create the RandomNumberGenerator
+    RandomNumberGenerator rng(
+        this->technique, this->mode, this->nin, this->nout, seed_to_use);
 
     for (int i = 0; i < this->nin; i++) {
       for (int j = 0; j < this->nout; j++) {
@@ -40,6 +47,27 @@ public:
   }
   FeedForwardLayer(int nin, int nout, int seed)
       : nin(nin), nout(nout), seed(seed) {
+    _initialize();
+  }
+  FeedForwardLayer(
+      int nin,
+      int nout,
+      int seed,
+      const std::string& technique,
+      const std::string& mode)
+      : nin(nin), nout(nout), seed(seed) {
+    if (technique != constant::HE && technique != constant::XAVIER) {
+      throw std::runtime_error(
+          "FeedForward layer expects 'technique' to be either 'XAVIER' or 'HE'. Got: " +
+          technique);
+    }
+    if (mode != constant::UNIFORM && mode != constant::NORMAL) {
+      throw std::runtime_error(
+          "FeedForward layer expects 'mode' to be either 'UNIFORM' or 'NORMAL'. Got: " +
+          mode);
+    }
+    this->technique = technique;
+    this->mode = mode;
     _initialize();
   }
 
