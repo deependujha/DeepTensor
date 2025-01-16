@@ -133,6 +133,7 @@ PYBIND11_MODULE(_core, m) {
       m, "FeedForwardLayer")
       .def(py::init<int, int>())
       .def(py::init<int, int, int>())
+      .def(py::init<int, int, int, std::string, std::string>())
       .def("zero_grad", &FeedForwardLayer::zero_grad)
       .def("parameters", &FeedForwardLayer::parameters)
       .def("__call__", &FeedForwardLayer::call)
