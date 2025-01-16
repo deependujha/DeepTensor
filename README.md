@@ -32,16 +32,34 @@ pip install deeptensor
 
 ```python
 from deeptensor import (
+    # model
+    Model,
+
+    # Layers
     FeedForwardLayer,
+
+    # activation layers
     GeLu,
     LeakyReLu,
-    Model,
     ReLu,
     Sigmoid,
     SoftMax,
     Tanh,
+
+    # core objects
     Tensor,
     Value,
+
+    # optimizers
+    SGD,
+    Momentum,
+    AdaGrad,
+    RMSprop,
+    Adam,
+
+    # losses
+    mean_squared_error,
+    cross_entropy,
 )
 
 model = Model(
@@ -56,6 +74,8 @@ model = Model(
     False,  # using_cuda
 )
 
+opt = Adam(model, 0.01) # learning rate
+
 print(model)
 
 tensor_input = Tensor([2])
@@ -63,6 +83,13 @@ tensor_input.set(0, Value(2.4))
 tensor_input.set(1, Value(5.2))
 
 out = model(tensor_input)
+
+loss = mean_squared_error(out, YOUR_EXPECTED_OUTPUT)
+
+# backprop
+loss.backward()
+opt.step()
+opt.zero_grad()
 ```
 
 ---
