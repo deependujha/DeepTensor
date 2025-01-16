@@ -2,6 +2,7 @@
 #include <pybind11/stl.h>
 #include "layers/feed_forward_layer.h"
 #include "layers/non_linear_layer.h"
+#include "loss.h"
 #include "neural_network.h"
 #include "optimizer.h"
 #include "tensor.h"
@@ -227,4 +228,11 @@ PYBIND11_MODULE(_core, m) {
       .def_readwrite("beta1", &Adam::beta1)
       .def_readwrite("beta2", &Adam::beta2)
       .def("step", &Adam::step);
+
+  //   loss functions
+  m.def("mean_squared_error", &mean_squared_error);
+  m.def(
+      "cross_entropy",
+      &cross_entropy,
+      "A function that value object with cross_entropy applied");
 }

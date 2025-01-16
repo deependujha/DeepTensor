@@ -17,6 +17,8 @@ from ._core import (
     Tensor,
     Value,
     __doc__,
+    cross_entropy,
+    mean_squared_error,
 )
 
 __all__ = [
@@ -36,4 +38,6 @@ __all__ = [
     "Tensor",
     "Value",
     "__doc__",
+    "cross_entropy",
+    "mean_squared_error",
 ]
