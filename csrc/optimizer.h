@@ -36,20 +36,22 @@ class Momentum : public Optimizer {
 
 public:
   double learning_rate = 0.1;
-  double momentum = 0.1;
+  double decay_factor = 0.1;
 
   explicit Momentum(
       std::shared_ptr<Model> m,
       double learning_rate,
-      double momentum)
-      : m(std::move(m)), learning_rate(learning_rate), momentum(momentum) {
+      double decay_factor)
+      : m(std::move(m)),
+        learning_rate(learning_rate),
+        decay_factor(decay_factor) {
     velocity.resize(m->parameters().size(), 0);
   }
 
   void step() override {
     const auto& m_para = this->m->parameters();
     for (int i = 0; i < m_para.size(); i++) {
-      velocity[i] = this->momentum * velocity[i] + m_para[i]->grad;
+      velocity[i] = this->decay_factor * velocity[i] + m_para[i]->grad;
       m_para[i]->data = m_para[i]->data - this->learning_rate * velocity[i];
     }
   }
@@ -119,25 +121,31 @@ class RMSprop : public Optimizer {
   std::shared_ptr<Model> m;
   std::vector<double> prev_grad_square;
   double epsilon = 1e-8;
-  double beta = 0.9; // Decay rate for the moving average
+
+  void _initialize() {
+    prev_grad_square.resize(m->parameters().size(), 0.0);
+  }
 
 public:
   double learning_rate = 0.001;
+  double decay_factor = 0.9; // Decay rate for the moving average
 
   explicit RMSprop(
       std::shared_ptr<Model> m,
       double learning_rate,
-      double beta = 0.9)
-      : m(std::move(m)), learning_rate(learning_rate), beta(beta) {
-    prev_grad_square.resize(m->parameters().size(), 0.0);
-  }
+      double decay_factor)
+      : m(std::move(m)),
+        learning_rate(learning_rate),
+        decay_factor(decay_factor) {}
+  explicit RMSprop(std::shared_ptr<Model> m, double learning_rate)
+      : m(std::move(m)), learning_rate(learning_rate) {}
 
   void step() override {
     const auto& m_para = this->m->parameters();
     for (size_t i = 0; i < m_para.size(); i++) {
       // Update moving average of squared gradients
-      prev_grad_square[i] = beta * prev_grad_square[i] +
-          (1 - beta) * (m_para[i]->grad * m_para[i]->grad);
+      prev_grad_square[i] = decay_factor * prev_grad_square[i] +
+          (1 - decay_factor) * (m_para[i]->grad * m_para[i]->grad);
 
       // Update parameter
       m_para[i]->data = m_para[i]->data -
@@ -154,8 +162,6 @@ class Adam : public Optimizer {
   std::vector<double> prev_grad_square;
   std::vector<double> velocity;
   double epsilon = 1e-8;
-  double beta1 = 0.9; // Decay rate for the moving average
-  double beta2 = 0.999; // Decay rate for the moving average
   int time = 1;
 
   void _initialize() {
@@ -164,6 +170,8 @@ class Adam : public Optimizer {
   }
 
 public:
+  double beta1 = 0.9; // Decay rate for the moving average
+  double beta2 = 0.999; // Decay rate for the moving average
   double learning_rate = 0.001;
 
   explicit Adam(
