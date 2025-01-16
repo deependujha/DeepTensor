@@ -209,7 +209,7 @@ PYBIND11_MODULE(_core, m) {
 
   py::class_<AdaGrad, std::shared_ptr<AdaGrad>>(m, "AdaGrad")
       .def(py::init<std::shared_ptr<Model>, double>())
-      .def_readwrite("learning_rate", &SGD::learning_rate)
+      .def_readwrite("learning_rate", &AdaGrad::learning_rate)
       .def("step", &AdaGrad::step);
 
   py::class_<RMSprop, std::shared_ptr<RMSprop>>(m, "RMSprop")
