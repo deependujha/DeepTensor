@@ -3,6 +3,7 @@
 #include "layers/feed_forward_layer.h"
 #include "layers/non_linear_layer.h"
 #include "neural_network.h"
+#include "optimizer.h"
 #include "tensor.h"
 #include "value.h"
 
@@ -121,7 +122,6 @@ PYBIND11_MODULE(_core, m) {
       .def("softmax", &Tensor::softmax)
       .def("__repr__", &Tensor::printMe);
 
-
   //   exposing Layer class
   py::class_<Layer, std::shared_ptr<Layer>>(m, "Layer")
       .def("zero_grad", &Layer::zero_grad)
@@ -191,4 +191,39 @@ PYBIND11_MODULE(_core, m) {
       .def("parameters", &Model::parameters)
       .def("__call__", &Model::call)
       .def("__repr__", &Model::printMe);
+
+  //   Optimzer class
+  py::class_<Optimizer, std::shared_ptr<Optimizer>>(m, "Optimizer")
+      .def("step", &Optimizer::step);
+
+  py::class_<SGD, std::shared_ptr<SGD>>(m, "SGD")
+      .def(py::init<std::shared_ptr<Model>, double>())
+      .def_readwrite("learning_rate", &SGD::learning_rate)
+      .def("step", &SGD::step);
+
+  py::class_<Momentum, std::shared_ptr<Momentum>>(m, "Momentum")
+      .def(py::init<std::shared_ptr<Model>, double, double>())
+      .def_readwrite("learning_rate", &Momentum::learning_rate)
+      .def_readwrite("decay_factor", &Momentum::decay_factor)
+      .def("step", &Momentum::step);
+
+  py::class_<AdaGrad, std::shared_ptr<AdaGrad>>(m, "AdaGrad")
+      .def(py::init<std::shared_ptr<Model>, double>())
+      .def_readwrite("learning_rate", &AdaGrad::learning_rate)
+      .def("step", &AdaGrad::step);
+
+  py::class_<RMSprop, std::shared_ptr<RMSprop>>(m, "RMSprop")
+      .def(py::init<std::shared_ptr<Model>, double>())
+      .def(py::init<std::shared_ptr<Model>, double, double>())
+      .def_readwrite("learning_rate", &RMSprop::learning_rate)
+      .def_readwrite("decay_factor", &RMSprop::decay_factor)
+      .def("step", &RMSprop::step);
+
+  py::class_<Adam, std::shared_ptr<Adam>>(m, "Adam")
+      .def(py::init<std::shared_ptr<Model>, double>())
+      .def(py::init<std::shared_ptr<Model>, double, double, double>())
+      .def_readwrite("learning_rate", &Adam::learning_rate)
+      .def_readwrite("beta1", &Adam::beta1)
+      .def_readwrite("beta2", &Adam::beta2)
+      .def("step", &Adam::step);
 }
