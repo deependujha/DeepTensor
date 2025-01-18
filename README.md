@@ -1,5 +1,14 @@
 # DeepTensor
 
+<div align="center">
+
+<a href="https://pypi.org/project/deeptensor/"><img src="https://img.shields.io/badge/pypi-3775A9?style=for-the-badge&logo=pypi&logoColor=white"/></a> <a href="https://deependujha.github.io/DeepTensor/"><img src="https://img.shields.io/badge/mkdocs-documentation"/></a>
+![PyPI](https://img.shields.io/pypi/v/deeptensor)
+![Downloads](https://img.shields.io/pypi/dm/deeptensor)
+![License](https://img.shields.io/github/license/deependujha/DeepTensor)
+
+</div>
+
 ![mexican cat dance](./assets/mexican-cat-dance.gif)
 
 - DeepTensor: A minimal deep learning library focused on custom autograd and efficient tensor operations.
