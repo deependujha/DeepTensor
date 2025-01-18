@@ -1,0 +1,34 @@
+name: Check Version
+
+# see: https://help.github.com/en/actions/reference/events-that-trigger-workflows
+on: # Trigger the workflow on push or pull request, but only for the main branch
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    types: [opened, reopened, ready_for_review, synchronize]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  DeepTensor_Version:
+    runs-on: ubuntu-latest
+
+    # Timeout: https://stackoverflow.com/a/59076067/4521646
+    timeout-minutes: 35
+
+    steps:
+      - uses: actions/checkout@v4
+      # we don't need to clone recursively.
+      #   As we only need to check if two values are same.
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Check if python version matches in pyproject.toml and src/deeptensor/__version__.py
+        run: |
+          pip install toml
+          python scripts/check_version.py

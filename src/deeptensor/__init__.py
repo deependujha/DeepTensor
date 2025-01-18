@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from ._core import (
+from .__version__ import version
+from ._core import (  # type: ignore  # noqa: PGH003
     SGD,
     AdaGrad,
     Adam,
@@ -40,4 +41,5 @@ __all__ = [
     "__doc__",
     "cross_entropy",
     "mean_squared_error",
+    "version",
 ]
