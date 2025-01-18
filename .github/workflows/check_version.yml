@@ -1,4 +1,4 @@
-name: CPP CI testing
+name: Check Version
 
 # see: https://help.github.com/en/actions/reference/events-that-trigger-workflows
 on: # Trigger the workflow on push or pull request, but only for the main branch
@@ -21,8 +21,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: recursive # Ensures submodules are initialized and updated
+      # we don't need to clone recursively.
+      #   As we only need to check if two values are same.
       - name: Set up Python 3.10
         uses: actions/setup-python@v5
         with:
