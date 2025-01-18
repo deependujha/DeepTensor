@@ -6,7 +6,7 @@
 ![PyPI](https://img.shields.io/pypi/v/deeptensor)
 ![Downloads](https://img.shields.io/pypi/dm/deeptensor)
 ![License](https://img.shields.io/github/license/deependujha/DeepTensor)
-
+<a href="https://colab.research.google.com/gist/deependujha/bf44ba02d975e691f4746a85ff8122fd/play-with-deeptensor.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="play with DeepTensor In Colab"/></a>
 </div>
 
 ![mexican cat dance](./assets/mexican-cat-dance.gif)
