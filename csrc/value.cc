@@ -1,7 +1,6 @@
 #include "value.h"
 #include <cassert>
 #include <cmath>
-#include <iostream>
 #include <memory>
 #include <stdexcept>
 #include <string>
