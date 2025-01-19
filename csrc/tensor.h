@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -10,8 +11,8 @@ public:
   std::vector<int> shape;
   std::vector<int> strides; // jump each index needs to make
   std::vector<std::shared_ptr<Value>> v;
-  int maxIdx;
-  int minIdx;
+  int maxIdx = 0;
+  int minIdx = 0;
 
   Tensor(std::vector<int> shape) : shape(std::move(shape)) {
     int total_size = 1;
@@ -20,10 +21,15 @@ public:
     }
     v.resize(total_size);
 
-    strides.resize(this->shape.size());
-    strides.back() = 1;
+    this->compute_stride();
+  }
+
+  void compute_stride() {
+    this->strides.clear();
+    this->strides.resize(this->shape.size());
+    this->strides.back() = 1;
     for (int i = int(this->shape.size()) - 2; i >= 0; --i) {
-      strides[i] = strides[i + 1] * this->shape[i + 1];
+      this->strides[i] = this->strides[i + 1] * this->shape[i + 1];
     }
 
     this->minIdx = 0;
@@ -31,7 +37,7 @@ public:
     for (auto& e : this->shape) {
       this->maxIdx *= e;
     }
-    maxIdx--; // 1 less
+    this->maxIdx--; // 1 less
   }
 
   std::string tensor_shape_str() {
@@ -46,7 +52,8 @@ public:
   void set(std::vector<int> idx, std::shared_ptr<Value> _v) {
     int original_idx = normalize_idx(idx);
     if ((original_idx < this->minIdx) || (original_idx > this->maxIdx)) {
-      std::string error_msg = "Index must be in the range. Limit (" +
+      std::string error_msg =
+          "Tensor set method: Index must be in the range. Limit (" +
           std::to_string(this->minIdx) + "," + std::to_string(this->maxIdx) +
           "), but found: " + std::to_string(original_idx) + ".";
 
@@ -58,7 +65,8 @@ public:
   std::shared_ptr<Value> get(std::vector<int> idx) {
     int original_idx = normalize_idx(idx);
     if ((original_idx < this->minIdx) || (original_idx > this->maxIdx)) {
-      std::string error_msg = "Index must be in the range. Limit (" +
+      std::string error_msg =
+          "Tensor get method: Index must be in the range. Limit (" +
           std::to_string(this->minIdx) + "," + std::to_string(this->maxIdx) +
           "), but found: " + std::to_string(original_idx) + ".";
 
@@ -70,7 +78,8 @@ public:
   // real index
   void set(int idx, std::shared_ptr<Value> _v) {
     if ((idx < this->minIdx) || (idx > this->maxIdx)) {
-      std::string error_msg = "Index must be in the range. Limit (" +
+      std::string error_msg =
+          "Tensor set method: Index must be in the range. Limit (" +
           std::to_string(this->minIdx) + "," + std::to_string(this->maxIdx) +
           "), but found: " + std::to_string(idx) + ".";
 
@@ -82,7 +91,8 @@ public:
   // real index
   std::shared_ptr<Value> get(int idx) {
     if ((idx < this->minIdx) || (idx > this->maxIdx)) {
-      std::string error_msg = "Index must be in the range. Limit (" +
+      std::string error_msg =
+          "Tensor get method: Index must be in the range. Limit (" +
           std::to_string(this->minIdx) + "," + std::to_string(this->maxIdx) +
           "), but found: " + std::to_string(idx) + ".";
 
@@ -122,6 +132,7 @@ public:
       new_shape.push_back(1);
     }
     t->shape = new_shape;
+    t->compute_stride();
   }
 
   std::shared_ptr<Tensor> add(std::shared_ptr<Tensor> other) {
@@ -174,23 +185,31 @@ public:
       throw std::runtime_error("Cannot perform matmul with a null tensor.");
     }
 
+    if (this->shape.size() > 2 || other->shape.size() > 2) {
+      throw std::runtime_error("For now, only 2-D matmul is allowed");
+    }
+
     // Determine effective shapes
     std::vector<int> this_shape = this->shape;
     std::vector<int> other_shape = other->shape;
 
     // Reshape if either is a vector (1D tensor)
     if (this_shape.size() == 1) {
-      this_shape.insert(this_shape.begin(), 1); // Treat as row vector
       std::vector<int> new_shape = {1, this_shape[0]};
       this->shape = new_shape;
+      this->compute_stride();
+      this_shape = new_shape;
     }
     if (other_shape.size() == 1) {
-      other_shape.push_back(1); // Treat as column vector
-      other->shape.push_back(1);
+      // other_shape.push_back(1); // Treat as column vector
+      // other->shape.push_back(1);
+      // this->recompute_stride();
+
+      throw std::runtime_error("other tensor can't be 1D for matmul.");
     }
 
     // Validate dimensions for matrix multiplication
-    if (this_shape[1] != other_shape[0]) {
+    if (this->shape[1] != other_shape[0]) {
       throw std::runtime_error(
           "Dimensions do not align for matmul. Got shapes: (" +
           std::to_string(this_shape[0]) + ", " + std::to_string(this_shape[1]) +
@@ -199,8 +218,8 @@ public:
     }
 
     // Compute output shape
-    std::vector<int> output_shape = {this_shape[0], other_shape[1]};
-    auto out = std::make_shared<Tensor>(output_shape);
+    std::vector<int> output_shape = {this_shape[0], other->shape[1]};
+    std::shared_ptr<Tensor> out = std::make_shared<Tensor>(output_shape);
 
     // Perform matrix multiplication
     for (int i = 0; i < output_shape[0]; i++) {

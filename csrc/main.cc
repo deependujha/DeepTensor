@@ -109,11 +109,16 @@ PYBIND11_MODULE(_core, m) {
           "get",
           static_cast<std::shared_ptr<Value> (Tensor::*)(std::vector<int>)>(
               &Tensor::get))
+      .def_readonly("shape", &Tensor::shape)
+      .def_readonly("strides", &Tensor::strides)
+      .def_readonly("maxIdx", &Tensor::maxIdx)
+      .def_readonly("minIdx", &Tensor::minIdx)
+      .def_readonly("vals", &Tensor::v)
       .def("normalize_idx", &Tensor::normalize_idx)
       .def("backward", &Tensor::backward)
       .def("zero_grad", &Tensor::zero_grad)
-      .def("add", &Tensor::add)
-      .def("div", &Tensor::div)
+      .def("__add__", &Tensor::add)
+      .def("__truediv__", &Tensor::div)
       .def("matmul", &Tensor::matmul)
       .def("relu", &Tensor::relu)
       .def("gelu", &Tensor::gelu)
@@ -240,5 +245,9 @@ PYBIND11_MODULE(_core, m) {
   m.def(
       "cross_entropy",
       &cross_entropy,
+      "A function that value object with cross_entropy applied");
+  m.def(
+      "binary_cross_entropy",
+      &binary_cross_entropy,
       "A function that value object with cross_entropy applied");
 }

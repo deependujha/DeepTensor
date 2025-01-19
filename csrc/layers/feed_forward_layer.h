@@ -90,7 +90,7 @@ public:
   }
 
   std::string printMe() override {
-    std::string s = "Layer(" + std::to_string(this->nin) + "," +
+    std::string s = "FeedForwardLayer(" + std::to_string(this->nin) + "," +
         std::to_string(this->nout) + ")";
     return s;
   }

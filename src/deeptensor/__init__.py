@@ -18,6 +18,7 @@ from ._core import (  # type: ignore  # noqa: PGH003
     Tensor,
     Value,
     __doc__,
+    binary_cross_entropy,
     cross_entropy,
     mean_squared_error,
 )
@@ -39,6 +40,7 @@ __all__ = [
     "Tensor",
     "Value",
     "__doc__",
+    "binary_cross_entropy",
     "cross_entropy",
     "mean_squared_error",
     "version",
