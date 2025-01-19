@@ -27,7 +27,7 @@ pip install deeptensor
 
 ## Checkout Demo
 
-- [play with demo](./demo/main.ipynb)
+- [play with latest demo](./demo/roboflow-demo.ipynb)
 
 ![demo](https://www.deependujha.xyz/deeptensor-assets/deeptensor-confusion-matrix.png)
 
