@@ -6,10 +6,12 @@
 ![PyPI](https://img.shields.io/pypi/v/deeptensor)
 ![Downloads](https://img.shields.io/pypi/dm/deeptensor)
 ![License](https://img.shields.io/github/license/deependujha/DeepTensor)
-<a href="https://colab.research.google.com/gist/deependujha/bf44ba02d975e691f4746a85ff8122fd/play-with-deeptensor.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="play with DeepTensor In Colab"/></a>
+<a target="_blank" href="https://colab.research.google.com/github/deependujha/DeepTensor/blob/main/demo/roboflow-demo.ipynb">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+</a>
 </div>
 
-![mexican cat dance](./assets/mexican-cat-dance.gif)
+![mexican cat dance](https://www.deependujha.xyz/deeptensor-assets/mexican-cat-dance.gif)
 
 - DeepTensor: A minimal deep learning library focused on custom autograd and efficient tensor operations.
 
@@ -27,7 +29,7 @@ pip install deeptensor
 
 - [play with demo](./demo/main.ipynb)
 
-![demo](./assets/trained-model.png)
+![demo](https://www.deependujha.xyz/deeptensor-assets/deeptensor-confusion-matrix.png)
 
 ---
 
@@ -69,6 +71,7 @@ from deeptensor import (
     # losses
     mean_squared_error,
     cross_entropy,
+    binary_cross_entropy,
 )
 
 model = Model(
