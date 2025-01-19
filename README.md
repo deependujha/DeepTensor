@@ -35,7 +35,7 @@ pip install deeptensor
 
 ## Check Docs
 
-- [visit docs](https://deependujha.github.io/deeptensor)
+- [visit docs](https://deependujha.github.io/DeepTensor)
 
 ---
 
