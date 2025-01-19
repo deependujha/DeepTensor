@@ -10,6 +10,13 @@ option(CMAKE_EXPORT_COMPILE_COMMANDS "Generate compile_commands.json" ON) # for 
 # Option to enable debug logging
 option(ENABLE_DEBUG "Enable debug logging" OFF)
 
+# Enable AddressSanitizer for Debug builds
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    message(STATUS "Enabling AddressSanitizer (ASan)")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
+    set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} -fsanitize=address")
+endif()
+
 # Add a preprocessor definition based on the ENABLE_DEBUG option
 if (ENABLE_DEBUG)
     add_compile_definitions(DEBUG)

@@ -43,9 +43,9 @@ void Value::backward() {
   this->grad = 1.0;
 
   // Iterating the vector in reverse order
-  std::cout << "topo list: \n";
+  // std::cout << "topo list: \n";
   for (int i = int(topo_list.size()) - 1; i >= 0; i--) {
-    std::cout << "i: " << i << "; node: " << topo_list[i]->printMe() << "\n";
+    // std::cout << "i: " << i << "; node: " << topo_list[i]->printMe() << "\n";
     topo_list[i]->executeBackWardMethod();
   }
 }
