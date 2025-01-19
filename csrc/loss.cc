@@ -62,10 +62,25 @@ std::shared_ptr<Value> binary_cross_entropy(
         logits->tensor_shape_str());
   }
   std::shared_ptr<Value> logit_value = logits->get(0);
+
   std::shared_ptr<Value> updated_logit_value = logit_value;
   if (actualIdx == 0) {
     updated_logit_value = std::make_shared<Value>(1.0)->sub(logit_value);
   }
+
+  if (updated_logit_value->data < 0 || updated_logit_value->data > 1) {
+    throw std::runtime_error(
+        "logit value can't be less than 0, and more than 1. Got: " +
+        std::to_string(logit_value->data));
+  }
+
+  constexpr double EPSILION = 1e-6;
+  if (updated_logit_value->data <= 0.0) {
+    updated_logit_value->data = EPSILION; // Handle near-zero values
+  } else if (updated_logit_value->data >= 1.0) {
+    updated_logit_value->data = 1.0 - EPSILION; // Handle near-one values
+  }
+
   std::shared_ptr logits_ln = updated_logit_value->ln();
   return logits_ln->mul(-1);
 }
