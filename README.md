@@ -13,7 +13,7 @@
 
 ![mexican cat dance](https://www.deependujha.xyz/deeptensor-assets/mexican-cat-dance.gif)
 
-- DeepTensor: A minimal deep learning library focused on custom autograd and efficient tensor operations.
+- DeepTensor: A minimal PyTorch-like **deep learning library** focused on custom autograd and efficient tensor operations.
 
 ---
 

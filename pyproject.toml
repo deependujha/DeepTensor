@@ -6,7 +6,7 @@ build-backend = "scikit_build_core.build"
 name = "deeptensor"
 version = "0.4.0" # new api
 url = "https://github.com/deependujha/deeptensor"
-description = "A minimal deep learning library focused on custom autograd and efficient tensor operations."
+description = "A minimal PyTorch-like **deep learning library** focused on custom autograd and efficient tensor operations."
 readme = "README.md"
 authors = [
   { name = "Deependu Jha", email = "deependujha21@gmail.com" },
