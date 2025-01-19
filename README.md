@@ -1,4 +1,4 @@
-# DeepTensor
+# DeepTensor 🔥
 
 <div align="center">
 
@@ -11,9 +11,33 @@
 </a>
 </div>
 
+<div align="center">
+
 ![mexican cat dance](https://www.deependujha.xyz/deeptensor-assets/mexican-cat-dance.gif)
 
-- DeepTensor: A minimal PyTorch-like **deep learning library** focused on custom autograd and efficient tensor operations.
+</div>
+
+- **`DeepTensor`**: A minimal PyTorch-like **deep learning library** focused on custom autograd and efficient tensor operations.
+
+---
+
+## **Features at a Glance** 🚀
+
+- **Automatic gradient computation** with a custom autograd engine.
+- **Weight initialization schemes**:
+  - `Xavier/Glorot` and `He` initialization in both `uniform` and `normal` variants.
+- **Activation functions**:
+  - `ReLU`, `GeLU`, `Sigmoid`, `Tanh`, `SoftMax`, `LeakyReLU`, and more.
+- **Built-in loss functions**:
+  - `Mean Squared Error (MSE)`, `Cross Entropy`, and `Binary Cross Entropy`.
+- **Optimizers**:
+  - `SGD`, `Momentum`, `AdaGrad`, `RMSprop`, and `Adam`.
+
+---
+
+### **Why DeepTensor?**
+
+DeepTensor offers a hands-on implementation of deep learning fundamentals with a focus on **customizability** and **learning the internals** of deep learning frameworks like PyTorch.
 
 ---
 
