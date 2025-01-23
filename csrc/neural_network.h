@@ -16,7 +16,10 @@ public:
 
   virtual std::string printMe() = 0;
 
-  virtual std::vector<std::shared_ptr<Value>> parameters() = 0;
+  virtual std::vector<std::shared_ptr<Value>> parameters() {
+    // no parameters
+    return std::vector<std::shared_ptr<Value>>{};
+  }
 
   virtual void zero_grad() = 0;
 };
