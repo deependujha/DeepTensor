@@ -47,6 +47,27 @@ DeepTensor offers a hands-on implementation of deep learning fundamentals with a
 pip install deeptensor
 ```
 
+<details>
+  <summary><i>Interested in Setting up the project?</i></summary>
+
+<div>
+
+  ```bash
+  git clone --recurse-submodules -j8 git@github.com:deependujha/DeepTensor.git
+  cd DeepTensor
+
+  # run ctests
+  make ctest
+
+  # install python package in editable mode
+  pip install -e .
+  ```
+
+</div>
+
+</details>
+
+
 ---
 
 ## Checkout Demo
@@ -71,6 +92,9 @@ from deeptensor import (
     Model,
 
     # Layers
+    Conv2D,
+    MaxPooling2D,
+    Flatten,
     FeedForwardLayer,
 
     # activation layers
