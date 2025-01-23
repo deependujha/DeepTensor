@@ -1,6 +1,8 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include "layers/convolutional_layer.h"
 #include "layers/feed_forward_layer.h"
+#include "layers/flatten.h"
 #include "layers/non_linear_layer.h"
 #include "loss.h"
 #include "neural_network.h"
@@ -144,6 +146,30 @@ PYBIND11_MODULE(_core, m) {
       .def("parameters", &FeedForwardLayer::parameters)
       .def("__call__", &FeedForwardLayer::call)
       .def("__repr__", &FeedForwardLayer::printMe);
+
+  py::class_<Conv2D, Layer, std::shared_ptr<Conv2D>>(m, "Conv2D")
+      .def(py::init<int, int, int>())
+      .def(py::init<int, int, int, int, int>())
+      .def(py::init<int, int, int, int, int, int, std::string, std::string>())
+      .def("zero_grad", &Conv2D::zero_grad)
+      .def("parameters", &Conv2D::parameters)
+      .def("__call__", &Conv2D::call)
+      .def("__repr__", &Conv2D::printMe);
+
+  py::class_<MaxPooling2D, Layer, std::shared_ptr<MaxPooling2D>>(
+      m, "MaxPooling2D")
+      .def(py::init<int>())
+      .def(py::init<int, int>())
+      .def("zero_grad", &MaxPooling2D::zero_grad)
+      .def("parameters", &MaxPooling2D::parameters)
+      .def("__call__", &MaxPooling2D::call)
+      .def("__repr__", &MaxPooling2D::printMe);
+
+  py::class_<Flatten, Layer, std::shared_ptr<Flatten>>(m, "Flatten")
+      .def("zero_grad", &Flatten::zero_grad)
+      .def("parameters", &Flatten::parameters)
+      .def("__call__", &Flatten::call)
+      .def("__repr__", &Flatten::printMe);
 
   py::class_<ReLu, Layer, std::shared_ptr<ReLu>>(m, "ReLu")
       .def(py::init<>())

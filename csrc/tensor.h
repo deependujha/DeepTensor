@@ -1,5 +1,4 @@
 #pragma once
-#include <iostream>
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -329,5 +328,16 @@ public:
   std::string printMe() {
     std::string my_shape = "tensor of shape: " + tensor_shape_str();
     return my_shape;
+  }
+
+  std::shared_ptr<Tensor> flatten() {
+    std::shared_ptr<Tensor> out =
+        std::make_shared<Tensor>(std::vector<int>{maxIdx + 1});
+    int i = 0;
+    for (auto& e : this->v) {
+      out->set(i, e);
+      i++;
+    }
+    return out;
   }
 };

@@ -14,11 +14,6 @@ public:
   }
 
   void zero_grad() override {};
-
-  std::vector<std::shared_ptr<Value>> parameters() override {
-    // no parameters
-    return std::vector<std::shared_ptr<Value>>{};
-  }
 };
 
 class GeLu : public Layer {
@@ -33,11 +28,6 @@ public:
   }
 
   void zero_grad() override {};
-
-  std::vector<std::shared_ptr<Value>> parameters() override {
-    // no parameters
-    return std::vector<std::shared_ptr<Value>>{};
-  }
 };
 
 class Tanh : public Layer {
@@ -52,11 +42,6 @@ public:
   }
 
   void zero_grad() override {};
-
-  std::vector<std::shared_ptr<Value>> parameters() override {
-    // no parameters
-    return std::vector<std::shared_ptr<Value>>{};
-  }
 };
 
 class Sigmoid : public Layer {
@@ -71,11 +56,6 @@ public:
   }
 
   void zero_grad() override {};
-
-  std::vector<std::shared_ptr<Value>> parameters() override {
-    // no parameters
-    return std::vector<std::shared_ptr<Value>>{};
-  }
 };
 
 class LeakyReLu : public Layer {
@@ -92,11 +72,6 @@ public:
   }
 
   void zero_grad() override {};
-
-  std::vector<std::shared_ptr<Value>> parameters() override {
-    // no parameters
-    return std::vector<std::shared_ptr<Value>>{};
-  }
 };
 
 class SoftMax : public Layer {
@@ -111,9 +86,4 @@ public:
   }
 
   void zero_grad() override {};
-
-  std::vector<std::shared_ptr<Value>> parameters() override {
-    // no parameters
-    return std::vector<std::shared_ptr<Value>>{};
-  }
 };
