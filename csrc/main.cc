@@ -166,6 +166,7 @@ PYBIND11_MODULE(_core, m) {
       .def("__repr__", &MaxPooling2D::printMe);
 
   py::class_<Flatten, Layer, std::shared_ptr<Flatten>>(m, "Flatten")
+      .def(py::init<>())
       .def("zero_grad", &Flatten::zero_grad)
       .def("parameters", &Flatten::parameters)
       .def("__call__", &Flatten::call)
