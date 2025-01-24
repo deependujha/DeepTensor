@@ -43,6 +43,18 @@ std::shared_ptr<Value> cross_entropy(
   // compute softmax of logits
   std::shared_ptr<Tensor> logits_softmax = logits->softmax();
 
+  constexpr double EPSILION = 1e-6;
+
+  for (int z = 0; z < logits_softmax->maxIdx; z++) {
+    if (logits_softmax->get(z)->data <= 0.0) {
+      logits_softmax->set(
+          z, std::make_shared<Value>(EPSILION)); // Handle near-zero values
+    } else if (logits_softmax->get(z)->data >= 1.0) {
+      logits_softmax->set(
+          z, std::make_shared<Value>(1.0 - EPSILION)); // Handle near-one values
+    }
+  }
+
   std::shared_ptr logits_ln = logits_softmax->get(actualIdx)->ln();
 
   return logits_ln->mul(-1); // not averaging it
