@@ -32,17 +32,26 @@ public:
   Value(double data) : data(data) {}
   Value(double data, std::unordered_set<std::shared_ptr<Value>> _prev, char _op)
       : data(data), _prev(std::move(_prev)), _op(_op) {}
+  
+  ~Value(){
+    this->_prev.clear();
+    this->clearBackwardMethod();
+  }
 
   // Setter to assign a new function
   void setBackWardMethod(std::function<void()> func) {
-    backward_ = func;
+    this->backward_ = func;
   }
 
-  // Method to execute the private method
+  // Method to execute the private method backward_
   void executeBackWardMethod() {
-    if (backward_) {
-      backward_();
+    if (this->backward_) {
+      this->backward_();
     }
+  }
+
+  void clearBackwardMethod() {
+    this->backward_ = nullptr;
   }
 
   void backward();

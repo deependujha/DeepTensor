@@ -23,6 +23,12 @@ public:
     this->compute_stride();
   }
 
+  ~Tensor(){
+    this->strides.clear();
+    this->shape.clear();
+    this->v.clear();
+  }
+
   void compute_stride() {
     this->strides.clear();
     this->strides.resize(this->shape.size());
@@ -37,6 +43,24 @@ public:
       this->maxIdx *= e;
     }
     this->maxIdx--; // 1 less
+  }
+
+  void reshape(std::vector<int> new_shape){
+    int total_ele = 1;
+    for(auto &e:new_shape){
+      total_ele*=e;
+    }
+    if(total_ele!=this->maxIdx +1 ){
+      throw std::runtime_error("New shape must be able to contain ("
+        + std::to_string(this->maxIdx+1)
+        + "), but new shape can handle: "
+        + std::to_string(total_ele)
+        + " elements." 
+      );
+    }
+
+    this->shape = new_shape;
+    this->compute_stride();
   }
 
   std::string tensor_shape_str() {
@@ -110,12 +134,6 @@ public:
   void zero_grad() {
     for (auto& e : this->v) {
       e->grad = 0;
-    }
-  }
-
-  void backward() {
-    for (auto& e : this->v) {
-      e->backward();
     }
   }
 
