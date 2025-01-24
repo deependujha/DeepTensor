@@ -118,21 +118,21 @@ public:
       for (int oh = 0; oh < output_height; ++oh) {
         for (int ow = 0; ow < output_width; ++ow) {
           // Compute the dot product of the kernel and the input patch
-          double result = 0.0;
+          std::shared_ptr<Value> result = std::make_shared<Value>(0.0);
           for (int ic = 0; ic < in_channels; ++ic) {
             for (int kh = 0; kh < kernel_size; ++kh) {
               for (int kw = 0; kw < kernel_size; ++kw) {
                 int ih = oh * stride + kh - padding;
                 int iw = ow * stride + kw - padding;
                 if (ih >= 0 && ih < height && iw >= 0 && iw < width) {
-                  result += input->get({ic, ih, iw})->data *
-                      weights->get({oc, ic, kh, kw})->data;
+                  result = result->add(input->get({ic, ih, iw})->mul(
+                      weights->get({oc, ic, kh, kw})));
                 }
               }
             }
           }
-          result += bias->get(oc)->data; // Add bias
-          output->set({oc, oh, ow}, std::make_shared<Value>(result));
+          result = result->add(bias->get(oc)); // Add bias
+          output->set({oc, oh, ow}, result);
         }
       }
     }

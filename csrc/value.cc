@@ -46,6 +46,8 @@ void Value::backward() {
   for (int i = int(topo_list.size()) - 1; i >= 0; i--) {
     // std::cout << "i: " << i << "; node: " << topo_list[i]->printMe() << "\n";
     topo_list[i]->executeBackWardMethod();
+    topo_list[i]->clearBackwardMethod();
+    topo_list[i]->_prev.clear();
   }
 }
 
