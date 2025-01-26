@@ -95,7 +95,7 @@ from deeptensor import (
     Conv2D,
     MaxPooling2D,
     Flatten,
-    FeedForwardLayer,
+    LinearLayer,
 
     # activation layers
     GeLu,
@@ -124,11 +124,11 @@ from deeptensor import (
 
 model = Model(
     [
-        FeedForwardLayer(2, 16),
+        LinearLayer(2, 16),
         ReLu(),
-        FeedForwardLayer(16, 16),
+        LinearLayer(16, 16),
         LeakyReLu(0.1),
-        FeedForwardLayer(16, 1),
+        LinearLayer(16, 1),
         Sigmoid(),
     ],
     False,  # using_cuda

@@ -6,7 +6,7 @@
 #include "../tensor.h"
 #include "../utils.h"
 
-class FeedForwardLayer : public Layer {
+class LinearLayer : public Layer {
 private:
   int nin; // no_of_inputs
   int nout; // no_of_outputs
@@ -42,14 +42,14 @@ private:
   }
 
 public:
-  FeedForwardLayer(int nin, int nout) : nin(nin), nout(nout) {
+  LinearLayer(int nin, int nout) : nin(nin), nout(nout) {
     _initialize();
   }
-  FeedForwardLayer(int nin, int nout, int seed)
+  LinearLayer(int nin, int nout, int seed)
       : nin(nin), nout(nout), seed(seed) {
     _initialize();
   }
-  FeedForwardLayer(
+  LinearLayer(
       int nin,
       int nout,
       int seed,
@@ -90,7 +90,7 @@ public:
   }
 
   std::string printMe() override {
-    std::string s = "FeedForwardLayer(" + std::to_string(this->nin) + "," +
+    std::string s = "LinearLayer(" + std::to_string(this->nin) + "," +
         std::to_string(this->nout) + ")";
     return s;
   }

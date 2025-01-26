@@ -1,7 +1,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include "layers/convolutional_layer.h"
-#include "layers/feed_forward_layer.h"
+#include "layers/linear_layer.h"
 #include "layers/flatten.h"
 #include "layers/non_linear_layer.h"
 #include "loss.h"
@@ -137,15 +137,15 @@ PYBIND11_MODULE(_core, m) {
       .def("parameters", &Layer::parameters)
       .def("__repr__", &Layer::printMe);
 
-  py::class_<FeedForwardLayer, Layer, std::shared_ptr<FeedForwardLayer>>(
-      m, "FeedForwardLayer")
+  py::class_<LinearLayer, Layer, std::shared_ptr<LinearLayer>>(
+      m, "LinearLayer")
       .def(py::init<int, int>())
       .def(py::init<int, int, int>())
       .def(py::init<int, int, int, std::string, std::string>())
-      .def("zero_grad", &FeedForwardLayer::zero_grad)
-      .def("parameters", &FeedForwardLayer::parameters)
-      .def("__call__", &FeedForwardLayer::call)
-      .def("__repr__", &FeedForwardLayer::printMe);
+      .def("zero_grad", &LinearLayer::zero_grad)
+      .def("parameters", &LinearLayer::parameters)
+      .def("__call__", &LinearLayer::call)
+      .def("__repr__", &LinearLayer::printMe);
 
   py::class_<Conv2D, Layer, std::shared_ptr<Conv2D>>(m, "Conv2D")
       .def(py::init<int, int, int>())

@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <memory>
 #include <vector>
-#include "layers/feed_forward_layer.h"
+#include "layers/linear_layer.h"
 #include "layers/non_linear_layer.h"
 #include "neural_network.h"
 
@@ -31,7 +31,7 @@
 //   int seed = 42;
 //   std::shared_ptr<Model> model = std::make_shared<Model>(
 //       std::vector<std::shared_ptr<Layer>>{
-//           std::make_shared<FeedForwardLayer>(2, 2, seed, "XAVIER", "NORMAL"),
+//           std::make_shared<LinearLayer>(2, 2, seed, "XAVIER", "NORMAL"),
 //       },
 //       false);
 
@@ -91,7 +91,7 @@
 //   int seed = 42;
 //   std::shared_ptr<Model> model = std::make_shared<Model>(
 //       std::vector<std::shared_ptr<Layer>>{
-//           std::make_shared<FeedForwardLayer>(2, 2, seed, "XAVIER", "NORMAL"),
+//           std::make_shared<LinearLayer>(2, 2, seed, "XAVIER", "NORMAL"),
 //           std::make_shared<ReLu>(),
 //       },
 //       false);
