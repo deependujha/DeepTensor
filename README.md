@@ -47,26 +47,23 @@ DeepTensor offers a hands-on implementation of deep learning fundamentals with a
 pip install deeptensor
 ```
 
-<details>
-  <summary><i>Interested in Setting up the project?</i></summary>
+---
 
-<div>
+## Setup the project for development
 
-  ```bash
-  git clone --recurse-submodules -j8 git@github.com:deependujha/DeepTensor.git
-  cd DeepTensor
+```bash
+git clone --recurse-submodules -j8 git@github.com:deependujha/DeepTensor.git
+cd DeepTensor
 
-  # run ctests
-  make ctest
+# run ctests
+make ctest
 
-  # install python package in editable mode
-  pip install -e .
-  ```
+# install python package in editable mode
+pip install -e .
 
-</div>
-
-</details>
-
+# run pytest
+make test
+```
 
 ---
 
@@ -81,6 +78,8 @@ pip install deeptensor
 ## Check Docs
 
 - [visit docs](https://deependujha.github.io/DeepTensor)
+
+![loss curve](https://www.deependujha.xyz/deeptensor-assets/loss-curve.png)
 
 ---
 
@@ -154,10 +153,19 @@ opt.zero_grad()
 
 ---
 
-## WIP
+## Features expected to be added
 
 - Save & Load model
-- Train MNIST model
 - Train a character-level transformer model
 - Add support for DDP
-- Add support for CUDA execution
+- Add support for CUDA execution ⭐️
+
+---
+
+## Open to Opportunities 🎅🏻🎁
+
+I am actively seeking new opportunities to contribute to impactful projects in the deep learning and AI space.
+
+If you are interested in collaborating or have a position that aligns with my expertise, feel free to reach out!
+
+You can connect with me on [GitHub](https://github.com/deependujha), [X (formerly twitter)](https://x.com/deependu__), or email me: `deependujha21@gmail.com`.
